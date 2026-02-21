@@ -1,0 +1,235 @@
+"""Parse JSONL.GZ files into SQLite persons, jobs, education, changes tables."""
+
+import gzip
+import json
+import logging
+import re
+import sqlite3
+from glob import glob
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Level normalization
+# ---------------------------------------------------------------------------
+
+_LEVEL_RULES: list[tuple[re.Pattern, str]] = [
+    (re.compile(r"\b(c-suite|chief|ceo|cto|cfo|coo)\b", re.I), "C-Suite"),
+    (re.compile(r"\b(evp|svp|vice\s*president|vp)\b", re.I), "VP"),
+    (re.compile(r"\b(senior\s+director|director)\b", re.I), "Director"),
+    (re.compile(r"\b(senior\s+manager|manager)\b", re.I), "Manager"),
+    (re.compile(r"\b(principal|staff|lead)\b", re.I), "Staff"),
+    (re.compile(r"\b(senior|sr)\b", re.I), "Senior"),
+    (re.compile(r"\b(junior|associate|entry|ic)\b", re.I), "IC"),
+]
+
+
+def normalize_level(raw: str | None) -> str:
+    """Map a raw level/title string to a canonical level."""
+    if not raw:
+        return "Unknown"
+    for pattern, level in _LEVEL_RULES:
+        if pattern.search(raw):
+            return level
+    return "Unknown"
+
+
+# ---------------------------------------------------------------------------
+# Date helpers
+# ---------------------------------------------------------------------------
+
+def months_between(start_str: str | None, end_str: str | None) -> int | None:
+    """Return the number of months between two ISO date strings, or None."""
+    if not start_str or not end_str:
+        return None
+    try:
+        sy, sm = int(start_str[:4]), int(start_str[5:7])
+        ey, em = int(end_str[:4]), int(end_str[5:7])
+        return (ey - sy) * 12 + (em - sm)
+    except (ValueError, IndexError):
+        return None
+
+
+# ---------------------------------------------------------------------------
+# Schema
+# ---------------------------------------------------------------------------
+
+_CREATE_TABLES_SQL = """
+CREATE TABLE IF NOT EXISTS persons (
+    id TEXT PRIMARY KEY,
+    created_at TEXT,
+    employment_status TEXT,
+    connections INTEGER,
+    location_country TEXT,
+    location_city TEXT
+);
+
+CREATE TABLE IF NOT EXISTS jobs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id TEXT,
+    title TEXT,
+    function TEXT,
+    level TEXT,
+    company_name TEXT,
+    company_industry TEXT,
+    started_at TEXT,
+    ended_at TEXT,
+    duration_months INTEGER,
+    company_tenure_months INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS education (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id TEXT,
+    school TEXT,
+    degree TEXT,
+    field TEXT,
+    started_at TEXT,
+    ended_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS changes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id TEXT,
+    title_change_detected_at TEXT,
+    company_change_detected_at TEXT,
+    info_change_detected_at TEXT
+);
+"""
+
+
+def create_tables(conn: sqlite3.Connection) -> None:
+    """Create all four tables if they don't exist."""
+    conn.executescript(_CREATE_TABLES_SQL)
+
+
+# ---------------------------------------------------------------------------
+# Record loading
+# ---------------------------------------------------------------------------
+
+def load_record(record: dict, conn: sqlite3.Connection) -> None:
+    """Insert one person record (with jobs, education, changes) into the DB."""
+    pid = record["id"]
+    loc = record.get("location") or {}
+
+    conn.execute(
+        "INSERT OR REPLACE INTO persons (id, created_at, employment_status, connections, location_country, location_city) VALUES (?,?,?,?,?,?)",
+        (
+            pid,
+            record.get("created_at"),
+            record.get("employment_status"),
+            record.get("connections"),
+            loc.get("country"),
+            loc.get("city"),
+        ),
+    )
+
+    for job in record.get("jobs", []):
+        started = job.get("started_at")
+        ended = job.get("ended_at")
+        duration = months_between(started, ended)
+        company_tenure = duration  # same logic per fixture
+
+        conn.execute(
+            "INSERT INTO jobs (person_id, title, function, level, company_name, company_industry, started_at, ended_at, duration_months, company_tenure_months) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (
+                pid,
+                job.get("title"),
+                job.get("function"),
+                normalize_level(job.get("level")),
+                job.get("company_name"),
+                job.get("company_industry"),
+                started,
+                ended,
+                duration,
+                company_tenure,
+            ),
+        )
+
+    for edu in record.get("education", []):
+        conn.execute(
+            "INSERT INTO education (person_id, school, degree, field, started_at, ended_at) VALUES (?,?,?,?,?,?)",
+            (
+                pid,
+                edu.get("school"),
+                edu.get("degree"),
+                edu.get("field"),
+                edu.get("started_at"),
+                edu.get("ended_at"),
+            ),
+        )
+
+    changes = record.get("changes") or {}
+    conn.execute(
+        "INSERT INTO changes (person_id, title_change_detected_at, company_change_detected_at, info_change_detected_at) VALUES (?,?,?,?)",
+        (
+            pid,
+            changes.get("title_change_detected_at"),
+            changes.get("company_change_detected_at"),
+            changes.get("info_change_detected_at"),
+        ),
+    )
+
+
+# ---------------------------------------------------------------------------
+# File / directory ingestion
+# ---------------------------------------------------------------------------
+
+def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
+    """Ingest a single JSONL.GZ file. Returns (loaded, skipped)."""
+    filepath = Path(filepath)
+    loaded = 0
+    skipped = 0
+
+    with gzip.open(filepath, "rt", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                logger.warning("Skipping malformed line in %s", filepath)
+                skipped += 1
+                continue
+            load_record(record, conn)
+            loaded += 1
+
+    conn.commit()
+    return loaded, skipped
+
+
+def run(data_dir: str, db_path: str) -> int:
+    """Ingest all matching JSONL.GZ files from data_dir into db_path. Returns total loaded."""
+    conn = sqlite3.connect(db_path)
+    create_tables(conn)
+
+    pattern = str(Path(data_dir) / "live_data_persons_history_*.jsonl.gz")
+    total = 0
+    for fp in sorted(glob(pattern)):
+        loaded, _ = ingest_file(fp, conn)
+        total += loaded
+
+    conn.close()
+    return total
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
+
+    data_dir = os.environ.get("DATA_DIR", "data")
+    db_path = os.environ.get("DB_PATH", "skillshock.db")
+
+    logging.basicConfig(level=logging.INFO)
+    total = run(data_dir, db_path)
+    logger.info("Ingested %d records total.", total)

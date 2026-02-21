@@ -134,8 +134,7 @@ def make_person(idx: int) -> dict:
             "title": title,
             "function": func_name,
             "level": level,
-            "company_name": company,
-            "company_industry": industry,
+            "company": {"name": company, "industry": industry},
             "started_at": job_start.isoformat(),
             "ended_at": ended_at,
             "duration": dur,
@@ -165,14 +164,13 @@ def make_person(idx: int) -> dict:
         "created_at": created_at.isoformat(),
         "employment_status": emp_status,
         "connections": connections,
-        "location": {"country": country, "city": city},
+        "country": country,
+        "location_details": {"country": country, "locality": city},
         "jobs": jobs,
         "education": education,
-        "changes": {
-            "title_change_detected_at": title_change.isoformat() if title_change else None,
-            "company_change_detected_at": company_change.isoformat() if company_change else None,
-            "info_change_detected_at": info_change.isoformat() if info_change else None,
-        },
+        "title_change_detected_at": title_change.isoformat() if title_change else None,
+        "company_change_detected_at": company_change.isoformat() if company_change else None,
+        "info_change_detected_at": info_change.isoformat() if info_change else None,
     }
 
 

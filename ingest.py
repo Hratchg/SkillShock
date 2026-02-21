@@ -111,7 +111,15 @@ def create_tables(conn: sqlite3.Connection) -> None:
 def load_record(record: dict, conn: sqlite3.Connection) -> None:
     """Insert one person record (with jobs, education, changes) into the DB."""
     pid = record["id"]
-    loc = record.get("location") or {}
+
+    # Location: support both nested location_details dict and flat location dict
+    loc = record.get("location_details") or record.get("location") or {}
+    if isinstance(loc, dict):
+        country = loc.get("country") or record.get("country")
+        city = loc.get("locality") or loc.get("city")
+    else:
+        country = record.get("country")
+        city = None
 
     conn.execute(
         "INSERT OR IGNORE INTO persons (id, created_at, employment_status, connections, location_country, location_city) VALUES (?,?,?,?,?,?)",
@@ -120,16 +128,27 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
             record.get("created_at"),
             record.get("employment_status"),
             record.get("connections"),
-            loc.get("country") or record.get("location_country"),
-            loc.get("city") or record.get("location_city"),
+            country,
+            city,
         ),
     )
 
     for job in record.get("jobs", []):
         started = job.get("started_at")
         ended = job.get("ended_at")
-        duration = months_between(started, ended)
-        company_tenure = duration  # same logic per fixture
+
+        # Company info: support nested dict or flat fields
+        company = job.get("company") or {}
+        if isinstance(company, dict) and company:
+            company_name = company.get("name")
+            company_industry = company.get("industry")
+        else:
+            company_name = job.get("company_name") or (company if isinstance(company, str) else None)
+            company_industry = job.get("company_industry") or job.get("industry")
+
+        # Duration/tenure: use pre-computed integers if present, else compute
+        duration = job.get("duration") or months_between(started, ended)
+        tenure = job.get("company_tenure") or months_between(started, ended)
 
         conn.execute(
             "INSERT INTO jobs (person_id, title, function, level, company_name, company_industry, started_at, ended_at, duration_months, company_tenure_months) VALUES (?,?,?,?,?,?,?,?,?,?)",
@@ -138,12 +157,12 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
                 job.get("title"),
                 job.get("function"),
                 normalize_level(job.get("level") or job.get("seniority") or ""),
-                job.get("company_name") or job.get("company"),
-                job.get("company_industry") or job.get("industry"),
+                company_name,
+                company_industry,
                 started,
                 ended,
                 duration,
-                company_tenure,
+                tenure,
             ),
         )
 
@@ -160,14 +179,22 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
             ),
         )
 
-    changes = record.get("changes") or {}
+    # Changes: support both top-level fields and nested "changes" dict
+    chg = record.get("changes") or {}
+    title_change = chg.get("title_change_detected_at") if isinstance(chg, dict) else None
+    title_change = title_change or record.get("title_change_detected_at")
+    company_change = chg.get("company_change_detected_at") if isinstance(chg, dict) else None
+    company_change = company_change or record.get("company_change_detected_at")
+    info_change = chg.get("info_change_detected_at") if isinstance(chg, dict) else None
+    info_change = info_change or record.get("info_change_detected_at")
+
     conn.execute(
         "INSERT INTO changes (person_id, title_change_detected_at, company_change_detected_at, info_change_detected_at) VALUES (?,?,?,?)",
         (
             pid,
-            changes.get("title_change_detected_at"),
-            changes.get("company_change_detected_at"),
-            changes.get("info_change_detected_at"),
+            title_change,
+            company_change,
+            info_change,
         ),
     )
 

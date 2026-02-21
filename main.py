@@ -24,7 +24,10 @@ def main():
     api_key     = os.getenv("RAPIDFIRE_API_KEY", "")
     upload_url  = os.getenv("RAPIDFIRE_UPLOAD_URL", "")
 
-    data_files = sorted(Path(data_dir).glob("live_data_persons_history_*.jsonl.gz"))
+    data_files = sorted(
+        list(Path(data_dir).glob("live_data_persons_history_*.jsonl.gz"))
+        + list(Path(data_dir).glob("live_data_persons_history_*.jsonl"))
+    )
 
     # Step 1: Ingest
     logger.info("=== Step 1/4: Ingest ===")

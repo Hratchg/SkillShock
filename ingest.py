@@ -203,13 +203,20 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
 # File / directory ingestion
 # ---------------------------------------------------------------------------
 
+def _open_jsonl(filepath: Path):
+    """Open a .jsonl or .jsonl.gz file for reading text."""
+    if str(filepath).endswith(".gz"):
+        return gzip.open(filepath, "rt", encoding="utf-8")
+    return open(filepath, "r", encoding="utf-8")
+
+
 def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
-    """Ingest a single JSONL.GZ file. Returns (loaded, skipped)."""
+    """Ingest a single JSONL or JSONL.GZ file. Returns (loaded, skipped)."""
     filepath = Path(filepath)
     loaded = 0
     skipped = 0
 
-    with gzip.open(filepath, "rt", encoding="utf-8") as fh:
+    with _open_jsonl(filepath) as fh:
         for line in fh:
             line = line.strip()
             if not line:
@@ -229,14 +236,15 @@ def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
 
 
 def run(data_dir: str, db_path: str) -> int:
-    """Ingest all matching JSONL.GZ files from data_dir into db_path. Returns total loaded."""
+    """Ingest all matching JSONL / JSONL.GZ files from data_dir into db_path. Returns total loaded."""
     conn = sqlite3.connect(db_path)
     create_tables(conn)
 
-    pattern = str(Path(data_dir) / "live_data_persons_history_*.jsonl.gz")
-    files = sorted(glob(pattern))
+    base = Path(data_dir)
+    files = sorted(glob(str(base / "live_data_persons_history_*.jsonl.gz"))) + sorted(glob(str(base / "live_data_persons_history_*.jsonl")))
+    files = sorted(set(files))  # dedupe and sort
     if not files:
-        raise FileNotFoundError(f"No JSONL.GZ files in {data_dir}")
+        raise FileNotFoundError(f"No JSONL or JSONL.GZ files in {data_dir}")
 
     total = 0
     for fp in files:

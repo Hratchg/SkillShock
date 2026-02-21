@@ -46,7 +46,7 @@ def months_between(start_str: str | None, end_str: str | None) -> int | None:
     try:
         sy, sm = int(start_str[:4]), int(start_str[5:7])
         ey, em = int(end_str[:4]), int(end_str[5:7])
-        return (ey - sy) * 12 + (em - sm)
+        return max(0, (ey - sy) * 12 + (em - sm))
     except (ValueError, IndexError):
         return None
 
@@ -114,14 +114,14 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
     loc = record.get("location") or {}
 
     conn.execute(
-        "INSERT OR REPLACE INTO persons (id, created_at, employment_status, connections, location_country, location_city) VALUES (?,?,?,?,?,?)",
+        "INSERT OR IGNORE INTO persons (id, created_at, employment_status, connections, location_country, location_city) VALUES (?,?,?,?,?,?)",
         (
             pid,
             record.get("created_at"),
             record.get("employment_status"),
             record.get("connections"),
-            loc.get("country"),
-            loc.get("city"),
+            loc.get("country") or record.get("location_country"),
+            loc.get("city") or record.get("location_city"),
         ),
     )
 
@@ -137,9 +137,9 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
                 pid,
                 job.get("title"),
                 job.get("function"),
-                normalize_level(job.get("level")),
-                job.get("company_name"),
-                job.get("company_industry"),
+                normalize_level(job.get("level") or job.get("seniority") or ""),
+                job.get("company_name") or job.get("company"),
+                job.get("company_industry") or job.get("industry"),
                 started,
                 ended,
                 duration,
@@ -154,7 +154,7 @@ def load_record(record: dict, conn: sqlite3.Connection) -> None:
                 pid,
                 edu.get("school"),
                 edu.get("degree"),
-                edu.get("field"),
+                edu.get("field") or edu.get("major"),
                 edu.get("started_at"),
                 edu.get("ended_at"),
             ),
@@ -189,7 +189,7 @@ def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
                 continue
             try:
                 record = json.loads(line)
-            except json.JSONDecodeError:
+            except (json.JSONDecodeError, KeyError):
                 logger.warning("Skipping malformed line in %s", filepath)
                 skipped += 1
                 continue
@@ -197,6 +197,7 @@ def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
             loaded += 1
 
     conn.commit()
+    logger.info(f"{Path(filepath).name}: loaded={loaded} skipped={skipped}")
     return loaded, skipped
 
 
@@ -206,8 +207,12 @@ def run(data_dir: str, db_path: str) -> int:
     create_tables(conn)
 
     pattern = str(Path(data_dir) / "live_data_persons_history_*.jsonl.gz")
+    files = sorted(glob(pattern))
+    if not files:
+        raise FileNotFoundError(f"No JSONL.GZ files in {data_dir}")
+
     total = 0
-    for fp in sorted(glob(pattern)):
+    for fp in files:
         loaded, _ = ingest_file(fp, conn)
         total += loaded
 

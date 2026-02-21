@@ -202,7 +202,7 @@ def build_paths_table(target_role):
 # ---------------------------------------------------------------------------
 # Gradio UI
 # ---------------------------------------------------------------------------
-with gr.Blocks(theme=gr.themes.Soft(), title="SkillShock Dashboard") as demo:
+with gr.Blocks(title="SkillShock Dashboard") as demo:
 
     gr.Markdown("# SkillShock — Career Intelligence Dashboard")
     gr.Markdown("*Powered by Live Data Technologies People Data*")
@@ -298,4 +298,4 @@ with gr.Blocks(theme=gr.themes.Soft(), title="SkillShock Dashboard") as demo:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(theme=gr.themes.Soft())

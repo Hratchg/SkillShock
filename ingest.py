@@ -189,12 +189,12 @@ def ingest_file(filepath, conn: sqlite3.Connection) -> tuple[int, int]:
                 continue
             try:
                 record = json.loads(line)
-            except (json.JSONDecodeError, KeyError):
-                logger.warning("Skipping malformed line in %s", filepath)
+                load_record(record, conn)
+                loaded += 1
+            except (json.JSONDecodeError, KeyError) as exc:
+                logger.warning("Skipping malformed line in %s: %s", filepath, exc)
                 skipped += 1
                 continue
-            load_record(record, conn)
-            loaded += 1
 
     conn.commit()
     logger.info(f"{Path(filepath).name}: loaded={loaded} skipped={skipped}")

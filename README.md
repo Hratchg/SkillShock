@@ -15,24 +15,49 @@ Students make education and career decisions using unreliable signals. SkillShoc
 
 ## Setup
 
+### 1. Create and activate a virtual environment
 ```bash
-pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Install dependencies
+```bash
+pip3 install -r requirements.txt
+```
+
+### 3. Set up environment variables
+```bash
 cp .env.example .env
-# Edit .env: set DATA_DIR to your JSONL.GZ folder
+```
+Open `.env` and add your API keys if you have them. The app works without them.
+
+### 4. Add the data files
+Download the Live Data Technologies `.jsonl.gz` files from the team Google Drive (link in Discord) and place them in the `data/` folder:
+```
+SkillShock/
+└── data/
+    ├── live_data_persons_history_2026-02-19_00.jsonl.gz
+    ├── live_data_persons_history_2026-02-19_01.jsonl.gz
+    └── live_data_persons_history_2026-02-19_02.jsonl.gz
 ```
 
-## Run Pipeline
-
+### 5. Run the pipeline
+Run these in order — each must finish before the next:
 ```bash
-python main.py
+DATA_DIR=data python3 ingest.py
+python3 analytics.py
+python3 export.py
 ```
 
-This ingests the data, computes analytics, and produces `output.json`.
+You should see:
+- `ingest.py` → `Ingested 75139 records total`
+- `analytics.py` → processes and analyzes the data
+- `export.py` → `Wrote ./output.json`
 
-## Launch Dashboard
-
+### 6. Launch the dashboard
 ```bash
-python dashboard.py
+python3 dashboard.py
 ```
 
 Opens at http://localhost:7860 with interactive charts:

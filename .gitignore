@@ -4,3 +4,5 @@ output.json
 __pycache__/
 .pytest_cache/
 *.pyc
+data/*.gz
+skillshock.db

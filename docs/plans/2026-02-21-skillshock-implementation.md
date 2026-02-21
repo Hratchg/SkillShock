@@ -1,12 +1,45 @@
 # SkillShock Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+**Status:** ALL TASKS COMPLETE
+**Completed:** 2026-02-21
+**Repo:** https://github.com/Hratchg/SkillShock
 
-**Goal:** Build a 4-module Python pipeline that parses People Data JSONL.GZ files into SQLite, computes 5 career trajectory metrics, exports a structured JSON payload, and pushes it to RapidFire AI.
+**Goal:** Build a 4-module Python pipeline that parses People Data JSONL.GZ files into SQLite, computes 5 career trajectory metrics, exports a structured JSON payload, and displays it via a Gradio dashboard.
 
-**Architecture:** `ingest.py` → `analytics.py` → `export.py` → `push.py`, orchestrated by `main.py`. Each module is independently runnable. SQLite is the intermediate store. Output is a single `output.json` uploaded to RapidFire AI.
+**Architecture:** `ingest.py` → `analytics.py` → `export.py` → `push.py`, orchestrated by `main.py`. Dashboard via `dashboard.py`. Each module is independently runnable. SQLite is the intermediate store.
 
-**Tech Stack:** Python 3.10+, SQLite (stdlib), pandas, requests, python-dotenv, pytest
+**Tech Stack:** Python 3.10+, SQLite (stdlib), pandas, Gradio, Plotly, requests, python-dotenv, pytest
+
+## Completion Summary
+
+| Task | Status | Commit | Notes |
+|---|---|---|---|
+| 1. Project Scaffold | DONE | `6b52e71` | requirements.txt, .env.example, README.md, tests/ |
+| 2. Inspect Data Schema | DONE | (no commit) | Real schema discovered, differs from initial assumptions |
+| 3. Test Fixture | DONE | `2218eb5` | 20-record fixture matching real data schema |
+| 4. ingest.py (TDD) | DONE | `fec53a7` + `d9c3465` | 9 tests, handles both real + fixture schemas |
+| 5. analytics.py (TDD) | DONE | `9416ddf` | 10 tests, all 5 metrics |
+| 6. export.py (TDD) | DONE | `6a18ce6` | 5 tests, JSON payload builder |
+| 7. push.py | DONE | `e5dcd79` | Graceful skip if no API key |
+| 8. main.py | DONE | `90f65d3` | Sequential orchestrator |
+| 9. Real Data Adaptation | DONE | `0769b7a` | Schema fixes for nested company, top-level changes |
+| 10. Dashboard | DONE | `e95c074` | Gradio + Plotly, 6 tabs |
+| 11. Polish | DONE | `35d002c` + `130d3e2` | README, requirements, theme fix |
+
+**Tests:** 24/24 passing (9 ingest + 10 analytics + 5 export)
+**Real Data:** 75,139 people, 717,053 jobs ingested with 0 skipped
+
+## Lessons Learned (for future updates)
+
+1. **Real data schema differs from docs** — always run Task 2 (schema inspection) before writing ingest code. The actual JSONL has nested company dicts, top-level change fields, and pre-computed durations.
+
+2. **Output trimming is essential** — raw output.json was 59MB (231k unique roles). Trimming to top-200 per metric brought it to 0.6MB. Dashboard loads instantly.
+
+3. **RapidFire AI (`rapidfireai` pip package)** is an ML experiment tracker, not a dashboard builder. Used Gradio (installed as its dependency) for the dashboard instead.
+
+4. **Windows compatibility** — `NamedTemporaryFile` doesn't work well on Windows; use `tmp_path` pytest fixtures instead. `termios` (Unix-only) is imported by the `rapidfire` package (different from `rapidfireai`).
+
+---
 
 ---
 

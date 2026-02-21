@@ -17,16 +17,17 @@ Students make education and career decisions using unreliable signals. SkillShoc
 
 ### 1. Create and activate a virtual environment
 ```bash
-python3 -m venv venv
+python3.11 -m venv venv
 source venv/bin/activate
 ```
 
 ### 2. Install dependencies
 ```bash
+pip3 install numpy==2.2.0
 pip3 install -r requirements.txt
 ```
 
-### 3. Set up environment variables
+### 3. Set up environment variables (Optional)
 ```bash
 cp .env.example .env
 ```
@@ -92,6 +93,7 @@ JSONL.GZ data → ingest.py → SQLite → analytics.py → export.py → output
 ## Data
 
 Uses Live Data Technologies People Data (75,139 people, 717,053 jobs).
+Files are shared privately with the team — do not commit to GitHub.
 
 ## Tech Stack
 

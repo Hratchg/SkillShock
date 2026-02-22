@@ -1,0 +1,2 @@
+[console_scripts]
+rapidfireai = rapidfireai.cli:main

@@ -125,6 +125,68 @@ def api_paths(role: str):
     return JSONResponse({"role": role, "paths": sorted(p, key=lambda x: x["frequency"], reverse=True)[:5]})
 
 
+@app.get("/api/sankey/major")
+def api_sankey_major(major: str = ""):
+    """Sankey data for Major → First Role. If major is given, single-major view; else top-12 overview."""
+    top_n_majors = 12
+    top_n_roles_per = 5
+    top_roles_single = 15
+
+    if major and major.strip():
+        roles_dict = _real_majors.get(major) or major_first.get(major) or {}
+        if not roles_dict:
+            return JSONResponse({"nodes": [], "links": []})
+        sorted_roles = sorted(roles_dict.items(), key=lambda x: x[1], reverse=True)[:top_roles_single]
+        nodes = [major] + [r for r, _ in sorted_roles]
+        links = [{"source": 0, "target": i + 1, "value": round(p * 1000)} for i, (_, p) in enumerate(sorted_roles)]
+        return JSONResponse({"nodes": nodes, "links": links, "title": f"Career Flow: {major} → First Role"})
+
+    # All-majors overview
+    nodes = []
+    major_to_idx = {}
+    role_to_idx = {}
+    top_m = list(_real_majors.keys())[:top_n_majors]
+    for m in top_m:
+        major_to_idx[m] = len(nodes)
+        nodes.append(m)
+    links = []
+    for m in top_m:
+        roles = _real_majors[m]
+        sorted_r = sorted(roles.items(), key=lambda x: x[1], reverse=True)[:top_n_roles_per]
+        for title, prob in sorted_r:
+            if title not in role_to_idx:
+                role_to_idx[title] = len(nodes)
+                nodes.append(title)
+            links.append({"source": major_to_idx[m], "target": role_to_idx[title], "value": round(prob * 1000)})
+    return JSONResponse({"nodes": nodes, "links": links, "title": "Career Flow: Major → First Role"})
+
+
+@app.get("/api/sankey/industry")
+def api_sankey_industry():
+    """Sankey data for Industry → Next Industry transfers."""
+    top_n = 10
+    ind_counts = {ind: len(dests) for ind, dests in industry_trans.items()}
+    top_ind = sorted(ind_counts, key=ind_counts.get, reverse=True)[:top_n]
+    nodes = list(top_ind)
+    dest_set = set()
+    for ind in top_ind:
+        for d in list(industry_trans[ind].keys())[:5]:
+            dest_set.add(d)
+    for d in sorted(dest_set, key=lambda x: -sum(industry_trans.get(s, {}).get(x, 0) for s in top_ind))[:top_n * 2]:
+        if d not in nodes:
+            nodes.append(d)
+    node_to_idx = {n: i for i, n in enumerate(nodes)}
+    links = []
+    for ind in top_ind:
+        dests = industry_trans.get(ind, {})
+        sorted_d = sorted(dests.items(), key=lambda x: x[1], reverse=True)[:5]
+        for d, prob in sorted_d:
+            j = node_to_idx.get(d)
+            if j is not None:
+                links.append({"source": node_to_idx[ind], "target": j, "value": round(prob * 500)})
+    return JSONResponse({"nodes": nodes, "links": links})
+
+
 # ── AI Planner helpers ────────────────────────────────────────────
 
 def _fuzzy_find(key: str, lookup: dict):

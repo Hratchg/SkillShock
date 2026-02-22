@@ -485,6 +485,7 @@ body{
   <button class="tab-btn" data-tab="major">Major → First Role</button>
   <button class="tab-btn" data-tab="industry">Industry Transitions</button>
   <button class="tab-btn" data-tab="paths">Career Paths</button>
+  <button class="tab-btn" data-tab="flow">Career Flow</button>
   <button class="tab-btn" data-tab="planner">AI Career Planner</button>
 </div>
 
@@ -589,6 +590,40 @@ body{
   <div class="paths-panel">
     <div class="paths-header"><span>Career Path</span><span class="ph-r">People</span></div>
     <div id="paths-list"></div>
+  </div>
+</div>
+
+<!-- ── Career Flow (Sankey) ── -->
+<div class="panel" id="tab-flow">
+  <div class="sec-head">
+    <div class="sec-head-left">
+      <div class="sec-eyebrow">Visualization · Career Flow</div>
+      <div class="sec-title">Flow: Major → First Role &amp; Industry Transfers</div>
+      <div class="sec-desc">Sankey diagrams showing the main line and transfers. Zoom with the toolbar, drag to pan, double-click to reset.</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="field"><label>Search Majors</label><input type="text" id="flow-major-search" placeholder="e.g. Computer Science…"/></div>
+    <div class="field wide"><label>Filter by Major</label><select id="flow-major-select"><option value="">All majors (overview)</option></select></div>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-inner chart-loading" id="chart-sankey-major" style="min-height:520px;">
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
+      Loading
+    </div>
+  </div>
+  <div class="sec-head" style="padding-top:20px;">
+    <div class="sec-head-left">
+      <div class="sec-eyebrow">Visualization · Industry Transfers</div>
+      <div class="sec-title">Where do industries feed into?</div>
+      <div class="sec-desc">Top industries and their most common transfer destinations.</div>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-inner chart-loading" id="chart-sankey-industry" style="min-height:460px;">
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
+      Loading
+    </div>
   </div>
 </div>
 
@@ -932,12 +967,19 @@ async function boot() {
   ldr.classList.add('fade');
   setTimeout(()=>ldr.remove(), 700);
 
+  // Populate flow-major-select
+  const flowMajorSel = document.getElementById('flow-major-select');
+  flowMajorSel.innerHTML = '<option value="">All majors (overview)</option>' +
+    META.top_majors.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+
   // Pre-load charts
   loadPromo();
   loadRole(META.top_roles[0]);
   loadMajor(META.top_majors[0]);
   loadInd(META.top_industries[0]);
   loadPaths(META.top_target_roles[0]);
+  loadSankeyMajor('');
+  loadSankeyIndustry();
 }
 
 /* ── Chart loaders ── */
@@ -1055,7 +1097,91 @@ boot().then(()=>{
   wire('major-search','major-select',()=>META.top_majors,loadMajor);
   wire('ind-search','ind-select',()=>META.top_industries,loadInd);
   wire('path-search','path-select',()=>META.top_target_roles,loadPaths);
+
+  // Career Flow major search/select
+  const flowSearch = document.getElementById('flow-major-search');
+  const flowSel    = document.getElementById('flow-major-select');
+  flowSearch.addEventListener('input', ()=>{
+    const q = flowSearch.value.trim().toLowerCase();
+    const all = META.top_majors;
+    const filt = q
+      ? [...all.filter(o=>o.toLowerCase().startsWith(q)),
+         ...all.filter(o=>!o.toLowerCase().startsWith(q)&&o.toLowerCase().includes(q))]
+      : all;
+    const prev = flowSel.value;
+    flowSel.innerHTML = '<option value="">All majors (overview)</option>' +
+      filt.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+    if(filt.includes(prev)) flowSel.value = prev;
+  });
+  flowSel.addEventListener('change', ()=> loadSankeyMajor(flowSel.value));
 });
+
+/* ── Sankey charts ── */
+const SANKEY_LAYOUT = {
+  paper_bgcolor: BG, plot_bgcolor: BG,
+  font: { family:"'Inter',sans-serif", color:TEXT2, size:11 },
+  margin: { l:10, r:10, t:50, b:10 },
+  dragmode: 'zoom',
+};
+
+async function loadSankeyMajor(major) {
+  const el = document.getElementById('chart-sankey-major');
+  setLoading('chart-sankey-major');
+  const url = major ? `/api/sankey/major?major=${encodeURIComponent(major)}` : '/api/sankey/major';
+  const data = await fetch(url).then(r=>r.json());
+  el.classList.remove('chart-loading'); el.innerHTML='';
+  if(!data.nodes||!data.nodes.length){
+    el.innerHTML=`<div style="padding:60px;color:${TEXT3};font-size:13px;text-align:center;">No data for this major.</div>`;
+    return;
+  }
+  Plotly.newPlot(el,[{
+    type:'sankey',
+    node:{
+      pad:15, thickness:20,
+      line:{color:'#242424',width:0.5},
+      label:data.nodes,
+      color:GOLD,
+    },
+    link:{
+      source:data.links.map(l=>l.source),
+      target:data.links.map(l=>l.target),
+      value:data.links.map(l=>l.value),
+      color:'rgba(201,169,110,0.25)',
+    },
+  }],Object.assign({},SANKEY_LAYOUT,{
+    title:{text:data.title||'Career Flow: Major → First Role',font:{size:13,color:TEXT2}},
+    height:520,
+  }),{displayModeBar:true, responsive:true, modeBarButtonsToRemove:['toImage','sendDataToCloud']});
+}
+
+async function loadSankeyIndustry() {
+  const el = document.getElementById('chart-sankey-industry');
+  setLoading('chart-sankey-industry');
+  const data = await fetch('/api/sankey/industry').then(r=>r.json());
+  el.classList.remove('chart-loading'); el.innerHTML='';
+  if(!data.nodes||!data.nodes.length){
+    el.innerHTML=`<div style="padding:60px;color:${TEXT3};font-size:13px;text-align:center;">No industry transfer data.</div>`;
+    return;
+  }
+  Plotly.newPlot(el,[{
+    type:'sankey',
+    node:{
+      pad:15, thickness:18,
+      line:{color:'#242424',width:0.5},
+      label:data.nodes,
+      color:'#8b7cba',
+    },
+    link:{
+      source:data.links.map(l=>l.source),
+      target:data.links.map(l=>l.target),
+      value:data.links.map(l=>l.value),
+      color:'rgba(139,124,186,0.25)',
+    },
+  }],Object.assign({},SANKEY_LAYOUT,{
+    title:{text:'Industry Transfers',font:{size:13,color:TEXT2}},
+    height:460,
+  }),{displayModeBar:true, responsive:true, modeBarButtonsToRemove:['toImage','sendDataToCloud']});
+}
 
 /* ── AI Planner ── */
 let PLAN_JSON = '';

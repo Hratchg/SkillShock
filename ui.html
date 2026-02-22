@@ -31,8 +31,7 @@ body{
   background:var(--bg);color:var(--text1);
   font-family:'Inter',sans-serif;
   -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-  overflow-x:hidden;
+  min-height:100vh;overflow-x:hidden;
 }
 
 /* ── Loader ── */
@@ -49,8 +48,7 @@ body{
 }
 .l-name{
   margin-top:20px;font-size:22px;font-weight:600;letter-spacing:-.02em;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  color:var(--gold);
 }
 .l-tag{
   margin-top:6px;font-size:11px;font-weight:500;letter-spacing:.2em;
@@ -67,53 +65,23 @@ body{
   background:var(--bg);
   border-bottom:1px solid var(--border);
 }
-.hero::before{
-  content:'';position:absolute;
-  top:-120px;left:-80px;
-  width:600px;height:600px;
-  background:radial-gradient(circle,rgba(201,169,110,.07) 0%,transparent 65%);
-  pointer-events:none;
-}
-.hero::after{
-  content:'';position:absolute;
-  bottom:-60px;right:10%;
-  width:400px;height:400px;
-  background:radial-gradient(circle,rgba(201,169,110,.04) 0%,transparent 65%);
-  pointer-events:none;
-}
 .hero-inner{
   display:flex;align-items:center;justify-content:space-between;
-  padding:48px 0 44px;
-  gap:40px;
+  padding:48px 0 44px;gap:40px;
   position:relative;z-index:1;
 }
 .hero-left{display:flex;align-items:center;gap:24px;}
-.hero-logo-wrap{
-  position:relative;flex-shrink:0;
-}
-.hero-logo-glow{
-  position:absolute;inset:-12px;
-  background:radial-gradient(circle,rgba(201,169,110,.18) 0%,transparent 65%);
-  border-radius:50%;
-  animation:glowpulse 3s ease-in-out infinite;
-}
-@keyframes glowpulse{
-  0%,100%{opacity:.6;transform:scale(1);}
-  50%{opacity:1;transform:scale(1.1);}
-}
+.hero-logo-wrap{position:relative;flex-shrink:0;}
 .hero-text{}
 .hero-name{
   font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1;
-  background:linear-gradient(135deg,var(--text1) 0%,var(--gold2) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  color:var(--text1);
 }
 .hero-sub{
   margin-top:8px;font-size:12px;font-weight:500;letter-spacing:.16em;
   text-transform:uppercase;color:var(--text3);
 }
-.hero-right{
-  display:flex;flex-direction:column;align-items:flex-end;gap:16px;
-}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:16px;}
 .hero-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
 .hero-pill{
   font-size:11px;font-weight:500;letter-spacing:.06em;
@@ -127,7 +95,6 @@ body{
   border-color:rgba(201,169,110,.35);
   background:rgba(201,169,110,.08);
 }
-.hero-dateline{font-size:11px;color:var(--text3);}
 
 /* ── Stat strip inside hero ── */
 .stat-strip{
@@ -140,8 +107,7 @@ body{
 .stat-item{
   flex:1;padding:32px 36px;
   border-right:1px solid var(--border);
-  transition:background .2s;
-  cursor:default;
+  transition:background .2s;cursor:default;
 }
 .stat-item:last-child{border-right:none;}
 .stat-item:hover{background:rgba(201,169,110,.03);}
@@ -154,7 +120,7 @@ body{
   text-transform:uppercase;color:var(--text3);
 }
 
-/* ── Nav / tabbar (sticky below hero) ── */
+/* ── Nav / tabbar ── */
 .tabbar{
   position:sticky;top:0;z-index:100;
   display:flex;align-items:stretch;
@@ -186,91 +152,50 @@ body{
 
 /* ── Overview panel ── */
 .ov-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1px;
-  background:var(--border);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
 }
 .ov-card{
-  background:var(--bg);
-  padding:52px 60px;
-  position:relative;overflow:hidden;
-  transition:background .25s;
+  background:var(--bg);padding:52px 60px;
+  position:relative;overflow:hidden;transition:background .25s;
 }
 .ov-card:hover{background:var(--bg2);}
-.ov-card-label{
-  font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--text3);margin-bottom:20px;
-}
-.ov-card-title{
-  font-size:22px;font-weight:600;letter-spacing:-.02em;
-  color:var(--text1);margin-bottom:12px;line-height:1.2;
-}
-.ov-card-desc{
-  font-size:13px;color:var(--text2);line-height:1.7;max-width:480px;
-}
-.ov-card-nums{
-  display:flex;gap:48px;margin-top:36px;
-}
-.ov-num{
-  display:flex;flex-direction:column;gap:6px;
-}
-.ov-num-val{
-  font-size:34px;font-weight:700;letter-spacing:-.04em;color:var(--text1);line-height:1;
-}
+.ov-card-label{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:20px;}
+.ov-card-title{font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--text1);margin-bottom:12px;line-height:1.2;}
+.ov-card-desc{font-size:13px;color:var(--text2);line-height:1.7;max-width:480px;}
+.ov-card-nums{display:flex;gap:48px;margin-top:36px;}
+.ov-num{display:flex;flex-direction:column;gap:6px;}
+.ov-num-val{font-size:34px;font-weight:700;letter-spacing:-.04em;color:var(--text1);line-height:1;}
 .ov-num-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
 .ov-card-accent{
   position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,var(--gold),transparent);
-  opacity:0;transition:opacity .25s;
+  background:var(--gold);opacity:0;transition:opacity .25s;
 }
-.ov-card:hover .ov-card-accent{opacity:1;}
+.ov-card:hover .ov-card-accent{opacity:.4;}
 
 /* ── Section header ── */
 .sec-head{
   display:flex;align-items:flex-end;justify-content:space-between;
-  padding:52px 72px 0;
-  margin-bottom:36px;
+  padding:52px 72px 0;margin-bottom:36px;
 }
-.sec-head-left{}
-.sec-eyebrow{
-  font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:10px;
-}
-.sec-title{
-  font-size:30px;font-weight:700;letter-spacing:-.025em;
-  color:var(--text1);line-height:1.1;
-}
-.sec-desc{
-  font-size:13px;color:var(--text2);line-height:1.6;
-  max-width:500px;margin-top:10px;
-}
+.sec-eyebrow{font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.sec-title{font-size:30px;font-weight:700;letter-spacing:-.025em;color:var(--text1);line-height:1.1;}
+.sec-desc{font-size:13px;color:var(--text2);line-height:1.6;max-width:500px;margin-top:10px;}
 
 /* ── Controls ── */
-.controls{
-  display:flex;gap:14px;align-items:flex-end;
-  padding:0 72px 32px;
-}
+.controls{display:flex;gap:14px;align-items:flex-end;padding:0 72px 32px;}
 .field{display:flex;flex-direction:column;gap:7px;}
-.field label{
-  font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--text3);
-}
-.field input,.field select{
-  background:var(--surface);
-  border:1px solid var(--border2);
-  border-radius:var(--rsm);
+.field label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.field input,.field select,.field textarea{
+  background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);
   color:var(--text1);font-family:inherit;font-size:13px;
   padding:10px 14px;outline:none;
-  transition:border-color .18s,box-shadow .18s;
-  min-width:200px;
+  transition:border-color .18s,box-shadow .18s;min-width:200px;
   -webkit-appearance:none;appearance:none;
 }
-.field input:focus,.field select:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(201,169,110,.1);
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,.1);
 }
 .field select{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23484848' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -280,64 +205,45 @@ body{
 .field select option{background:#1c1c1c;}
 .field.wide{flex:1;}
 .field.wide select,.field.wide input{width:100%;}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5;}
 
 /* ── Chart panel ── */
 .chart-panel{
-  margin:0 72px 64px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  overflow:hidden;
-  position:relative;
+  margin:0 72px 64px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;position:relative;
 }
 .chart-panel::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,var(--gold),transparent 60%);
-  opacity:.4;
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:var(--gold);opacity:.3;
 }
 .chart-inner{width:100%;min-height:420px;}
 .chart-loading{
   display:flex;align-items:center;justify-content:center;
-  min-height:420px;
-  flex-direction:column;gap:14px;
+  min-height:420px;flex-direction:column;gap:14px;
   color:var(--text3);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
 }
-.chart-loading-hex{
-  width:32px;height:32px;
-  animation:lbreathe 1.8s ease-in-out infinite;
-  opacity:.4;
-}
+.chart-loading-hex{width:32px;height:32px;animation:lbreathe 1.8s ease-in-out infinite;opacity:.4;}
 
 /* ── Paths panel ── */
 .paths-panel{
-  margin:0 72px 64px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  overflow:hidden;
-  position:relative;
+  margin:0 72px 64px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;position:relative;
 }
 .paths-panel::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,var(--gold),transparent 60%);
-  opacity:.4;
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:var(--gold);opacity:.3;
 }
 .paths-header{
-  display:flex;align-items:center;
-  padding:20px 32px 18px;
-  border-bottom:1px solid var(--border);
-  background:var(--surface2);
+  display:flex;align-items:center;padding:20px 32px 18px;
+  border-bottom:1px solid var(--border);background:var(--surface2);
 }
-.paths-header span{
-  font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);
-}
+.paths-header span{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
 .paths-header .ph-r{margin-left:auto;}
 .path-row{
   display:flex;align-items:center;gap:20px;
-  padding:26px 32px;
-  border-bottom:1px solid var(--border);
+  padding:26px 32px;border-bottom:1px solid var(--border);
   transition:background .18s;cursor:default;
 }
 .path-row:hover{background:rgba(201,169,110,.03);}
@@ -350,21 +256,177 @@ body{
 }
 .path-chips{display:flex;align-items:center;flex-wrap:wrap;gap:6px;flex:1;}
 .chip{
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border2);
-  border-radius:6px;padding:6px 14px;
-  font-size:13px;color:var(--text1);white-space:nowrap;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  border-radius:6px;padding:6px 14px;font-size:13px;color:var(--text1);white-space:nowrap;
   transition:border-color .18s,background .18s;
 }
 .path-row:hover .chip{border-color:rgba(201,169,110,.2);background:rgba(201,169,110,.04);}
 .chip-arr{color:var(--text3);font-size:13px;margin:0 2px;}
-.path-vol{
-  font-size:12px;font-weight:500;color:var(--gold);
-  flex-shrink:0;min-width:80px;text-align:right;
-  font-variant-numeric:tabular-nums;
-}
+.path-vol{font-size:12px;font-weight:500;color:var(--gold);flex-shrink:0;min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
 
-/* ── Scrollbar ── */
+/* ── AI Planner styles ── */
+.planner-layout{
+  display:grid;grid-template-columns:320px 1fr;gap:0;
+  border-top:1px solid var(--border);min-height:calc(100vh - 200px);
+}
+.planner-form{
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:36px 28px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:28px;
+}
+.planner-output{
+  padding:0;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.form-section-label{
+  font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.form-group label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);
+  color:var(--text1);font-family:inherit;font-size:12px;padding:9px 12px;outline:none;
+  transition:border-color .18s,box-shadow .18s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,169,110,.1);
+}
+.form-group select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23484848' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  padding-right:28px;cursor:pointer;
+}
+.form-group select option{background:#1c1c1c;}
+.form-group textarea{resize:vertical;min-height:60px;line-height:1.5;}
+.slider-wrap{display:flex;flex-direction:column;gap:6px;}
+.slider-wrap input[type=range]{
+  width:100%;accent-color:var(--gold);height:3px;cursor:pointer;
+}
+.slider-val{font-size:11px;color:var(--gold);font-weight:500;text-align:right;}
+.radio-group{display:flex;flex-direction:column;gap:7px;}
+.radio-item{display:flex;align-items:center;gap:9px;cursor:pointer;}
+.radio-item input[type=radio]{accent-color:var(--gold);width:13px;height:13px;cursor:pointer;}
+.radio-item span{font-size:12px;color:var(--text2);}
+
+.generate-btn{
+  width:100%;padding:14px;
+  background:var(--gold);color:#0b0b0b;
+  border:none;border-radius:var(--rsm);
+  font-family:inherit;font-size:13px;font-weight:600;
+  cursor:pointer;letter-spacing:.03em;
+  transition:opacity .18s,transform .1s;
+  margin-top:8px;
+}
+.generate-btn:hover{opacity:.88;}
+.generate-btn:active{transform:scale(.98);}
+.generate-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* Plan output area */
+.plan-status-bar{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 32px;background:var(--surface2);
+  border-bottom:1px solid var(--border);
+  font-size:11px;color:var(--text3);letter-spacing:.08em;
+  min-height:48px;
+}
+.status-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;
+}
+.status-dot.active{background:var(--gold);animation:dotpulse 1.2s ease-in-out infinite;}
+.status-dot.done{background:#4caf50;}
+.status-dot.error{background:#f44;}
+@keyframes dotpulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.plan-tabs{
+  display:flex;border-bottom:1px solid var(--border);
+  background:var(--surface);padding:0 32px;overflow-x:auto;
+}
+.plan-tabs::-webkit-scrollbar{display:none;}
+.plan-tab{
+  flex-shrink:0;height:42px;padding:0 4px;margin-right:24px;
+  font-size:12px;font-weight:400;color:var(--text3);
+  background:none;border:none;border-bottom:1.5px solid transparent;
+  cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;
+}
+.plan-tab:hover{color:var(--text2);}
+.plan-tab.active{color:var(--text1);border-bottom-color:var(--gold);font-weight:500;}
+
+.plan-pane{display:none;flex:1;overflow:auto;}
+.plan-pane.active{display:flex;flex-direction:column;}
+
+/* Plan markdown rendered */
+.plan-md{
+  padding:36px 40px;font-size:13px;line-height:1.75;color:var(--text2);
+  flex:1;
+}
+.plan-md h1{font-size:22px;font-weight:700;color:var(--text1);margin-bottom:8px;letter-spacing:-.02em;}
+.plan-md h2{font-size:15px;font-weight:600;color:var(--gold);margin:28px 0 10px;letter-spacing:.02em;text-transform:uppercase;font-size:10px;}
+.plan-md h3{font-size:14px;font-weight:600;color:var(--text1);margin:18px 0 6px;}
+.plan-md p{margin-bottom:12px;}
+.plan-md ul,.plan-md ol{padding-left:20px;margin-bottom:12px;}
+.plan-md li{margin-bottom:5px;}
+.plan-md strong{color:var(--text1);font-weight:600;}
+.plan-md em{color:var(--text2);font-style:italic;}
+.plan-md code{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:4px;padding:2px 7px;font-size:11px;color:var(--gold);
+}
+.plan-md blockquote{
+  border-left:2px solid var(--gold);padding-left:16px;color:var(--text2);
+  margin:16px 0;font-style:italic;
+}
+.plan-md hr{border:none;border-top:1px solid var(--border);margin:24px 0;}
+
+/* Data charts pane */
+.plan-charts{padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;flex:1;}
+.plan-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.plan-chart-card.full{grid-column:1/-1;}
+.plan-chart-header{padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface2);}
+.plan-chart-title{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
+.plan-chart-inner{width:100%;min-height:280px;}
+
+/* Paths in plan pane */
+.plan-paths{padding:28px 32px;flex:1;}
+.plan-path-row{
+  display:flex;align-items:center;gap:16px;
+  padding:20px 24px;border:1px solid var(--border);border-radius:var(--rsm);
+  margin-bottom:10px;background:var(--surface);transition:border-color .18s;
+}
+.plan-path-row:hover{border-color:rgba(201,169,110,.25);}
+.plan-path-idx{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:var(--gold);flex-shrink:0;
+}
+.plan-path-chips{display:flex;align-items:center;flex-wrap:wrap;gap:5px;flex:1;}
+.plan-path-vol{font-size:11px;color:var(--gold);flex-shrink:0;}
+
+/* Export row */
+.export-row{
+  display:flex;gap:12px;align-items:center;
+  padding:20px 32px;border-top:1px solid var(--border);
+  background:var(--surface2);
+}
+.export-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 18px;border-radius:var(--rsm);
+  font-family:inherit;font-size:12px;font-weight:500;
+  cursor:pointer;transition:opacity .18s;border:1px solid var(--border2);
+  color:var(--text2);background:var(--surface);
+  letter-spacing:.03em;
+}
+.export-btn:hover{border-color:var(--gold);color:var(--gold);opacity:.9;}
+.export-btn:disabled{opacity:.3;cursor:not-allowed;}
+.export-note{font-size:11px;color:var(--text3);margin-left:auto;}
+
+/* Gantt timeline */
+.timeline-pane{flex:1;padding:28px 32px;}
+
+/* Scrollbar */
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
@@ -376,18 +438,11 @@ body{
 <!-- ── Loader ── -->
 <div id="loader">
   <svg class="l-hex" width="72" height="72" viewBox="0 0 40 40" fill="none">
-    <defs>
-      <linearGradient id="ll" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#c9a96e"/>
-        <stop offset="100%" stop-color="#e8c98a"/>
-      </linearGradient>
-      <filter id="lf"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    </defs>
-    <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="url(#ll)" stroke-width="1.6" fill="url(#ll)" fill-opacity="0.1" filter="url(#lf)"/>
-    <path d="M20 3 L35 11.5 L35 20 L20 20 L5 20 L5 11.5 Z" fill="url(#ll)" opacity="0.2"/>
-    <line x1="5" y1="20" x2="35" y2="20" stroke="url(#ll)" stroke-width="1.6"/>
-    <line x1="20" y1="3" x2="5" y2="20" stroke="url(#ll)" stroke-width="1.6" opacity="0.55"/>
-    <line x1="20" y1="37" x2="35" y2="20" stroke="url(#ll)" stroke-width="1.6" opacity="0.55"/>
+    <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="#c9a96e" fill-opacity="0.1"/>
+    <path d="M20 3 L35 11.5 L35 20 L20 20 L5 20 L5 11.5 Z" fill="#c9a96e" opacity="0.2"/>
+    <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6"/>
+    <line x1="20" y1="3" x2="5" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity="0.55"/>
+    <line x1="20" y1="37" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity="0.55"/>
   </svg>
   <div class="l-name">SkillShock</div>
   <div class="l-tag">Loading</div>
@@ -398,23 +453,12 @@ body{
   <div class="hero-inner">
     <div class="hero-left">
       <div class="hero-logo-wrap">
-        <div class="hero-logo-glow"></div>
         <svg width="72" height="72" viewBox="0 0 40 40" fill="none">
-          <defs>
-            <linearGradient id="hl" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#c9a96e"/>
-              <stop offset="100%" stop-color="#e8c98a"/>
-            </linearGradient>
-            <filter id="hf" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="2" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="url(#hl)" stroke-width="1.6" fill="url(#hl)" fill-opacity="0.1" filter="url(#hf)"/>
-          <path d="M20 3 L35 11.5 L35 20 L20 20 L5 20 L5 11.5 Z" fill="url(#hl)" opacity="0.22"/>
-          <line x1="5" y1="20" x2="35" y2="20" stroke="url(#hl)" stroke-width="1.6"/>
-          <line x1="20" y1="3" x2="5" y2="20" stroke="url(#hl)" stroke-width="1.6" opacity="0.55"/>
-          <line x1="20" y1="37" x2="35" y2="20" stroke="url(#hl)" stroke-width="1.6" opacity="0.55"/>
+          <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="#c9a96e" fill-opacity="0.1"/>
+          <path d="M20 3 L35 11.5 L35 20 L20 20 L5 20 L5 11.5 Z" fill="#c9a96e" opacity="0.22"/>
+          <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6"/>
+          <line x1="20" y1="3" x2="5" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity="0.55"/>
+          <line x1="20" y1="37" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity="0.55"/>
         </svg>
       </div>
       <div class="hero-text">
@@ -430,10 +474,7 @@ body{
       </div>
     </div>
   </div>
-  <!-- Stat strip -->
-  <div class="stat-strip" id="stat-strip">
-    <!-- filled by JS -->
-  </div>
+  <div class="stat-strip" id="stat-strip"></div>
 </header>
 
 <!-- ── Tab Bar ── -->
@@ -444,13 +485,12 @@ body{
   <button class="tab-btn" data-tab="major">Major → First Role</button>
   <button class="tab-btn" data-tab="industry">Industry Transitions</button>
   <button class="tab-btn" data-tab="paths">Career Paths</button>
+  <button class="tab-btn" data-tab="planner">AI Career Planner</button>
 </div>
 
 <!-- ── Overview ── -->
 <div class="panel active" id="tab-overview">
-  <div class="ov-grid" id="ov-grid">
-    <!-- filled by JS -->
-  </div>
+  <div class="ov-grid" id="ov-grid"></div>
 </div>
 
 <!-- ── Promotion Velocity ── -->
@@ -464,10 +504,7 @@ body{
   </div>
   <div class="chart-panel">
     <div class="chart-inner chart-loading" id="chart-promo">
-      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none">
-        <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/>
-        <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/>
-      </svg>
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
       Loading
     </div>
   </div>
@@ -483,21 +520,12 @@ body{
     </div>
   </div>
   <div class="controls">
-    <div class="field">
-      <label>Search Roles</label>
-      <input type="text" id="role-search" placeholder="e.g. Software Engineer…"/>
-    </div>
-    <div class="field wide">
-      <label>Source Role</label>
-      <select id="role-select"></select>
-    </div>
+    <div class="field"><label>Search Roles</label><input type="text" id="role-search" placeholder="e.g. Software Engineer…"/></div>
+    <div class="field wide"><label>Source Role</label><select id="role-select"></select></div>
   </div>
   <div class="chart-panel">
     <div class="chart-inner chart-loading" id="chart-role">
-      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none">
-        <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/>
-        <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/>
-      </svg>
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
       Loading
     </div>
   </div>
@@ -513,21 +541,12 @@ body{
     </div>
   </div>
   <div class="controls">
-    <div class="field">
-      <label>Search Majors</label>
-      <input type="text" id="major-search" placeholder="e.g. Computer Science…"/>
-    </div>
-    <div class="field wide">
-      <label>Major / Field of Study</label>
-      <select id="major-select"></select>
-    </div>
+    <div class="field"><label>Search Majors</label><input type="text" id="major-search" placeholder="e.g. Computer Science…"/></div>
+    <div class="field wide"><label>Major / Field of Study</label><select id="major-select"></select></div>
   </div>
   <div class="chart-panel">
     <div class="chart-inner chart-loading" id="chart-major">
-      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none">
-        <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/>
-        <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/>
-      </svg>
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
       Loading
     </div>
   </div>
@@ -543,21 +562,12 @@ body{
     </div>
   </div>
   <div class="controls">
-    <div class="field">
-      <label>Search Industries</label>
-      <input type="text" id="ind-search" placeholder="e.g. Technology…"/>
-    </div>
-    <div class="field wide">
-      <label>Source Industry</label>
-      <select id="ind-select"></select>
-    </div>
+    <div class="field"><label>Search Industries</label><input type="text" id="ind-search" placeholder="e.g. Technology…"/></div>
+    <div class="field wide"><label>Source Industry</label><select id="ind-select"></select></div>
   </div>
   <div class="chart-panel">
     <div class="chart-inner chart-loading" id="chart-ind">
-      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none">
-        <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/>
-        <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/>
-      </svg>
+      <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>
       Loading
     </div>
   </div>
@@ -573,85 +583,254 @@ body{
     </div>
   </div>
   <div class="controls">
-    <div class="field">
-      <label>Search Roles</label>
-      <input type="text" id="path-search" placeholder="e.g. Director…"/>
-    </div>
-    <div class="field wide">
-      <label>Target Role</label>
-      <select id="path-select"></select>
-    </div>
+    <div class="field"><label>Search Roles</label><input type="text" id="path-search" placeholder="e.g. Director…"/></div>
+    <div class="field wide"><label>Target Role</label><select id="path-select"></select></div>
   </div>
   <div class="paths-panel">
-    <div class="paths-header">
-      <span>Career Path</span>
-      <span class="ph-r">People</span>
-    </div>
+    <div class="paths-header"><span>Career Path</span><span class="ph-r">People</span></div>
     <div id="paths-list"></div>
   </div>
 </div>
 
+<!-- ── AI Career Planner ── -->
+<div class="panel" id="tab-planner">
+  <div class="planner-layout">
+
+    <!-- Left: form -->
+    <div class="planner-form">
+
+      <div>
+        <div class="form-section-label">Academic Background</div>
+        <div class="form-group">
+          <label>Field of Study / Major</label>
+          <select id="ai-major"></select>
+        </div>
+        <div class="form-group">
+          <label>GPA / Academic Standing (optional)</label>
+          <input type="text" id="ai-gpa" placeholder="e.g. 3.7 / 4.0, Dean's List"/>
+        </div>
+        <div class="form-group">
+          <label>Months Until Graduation / Next Transition</label>
+          <div class="slider-wrap">
+            <input type="range" id="ai-months" min="1" max="48" value="12" oninput="document.getElementById('ai-months-val').textContent=this.value+' months'"/>
+            <div class="slider-val" id="ai-months-val">12 months</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-section-label">Work Experience</div>
+        <div class="form-group">
+          <label>Years of Work Experience</label>
+          <div class="slider-wrap">
+            <input type="range" id="ai-years" min="0" max="30" value="0" oninput="document.getElementById('ai-years-val').textContent=this.value+' years'"/>
+            <div class="slider-val" id="ai-years-val">0 years</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Current or Most Recent Role</label>
+          <select id="ai-current-role"></select>
+        </div>
+        <div class="form-group">
+          <label>Current Industry</label>
+          <select id="ai-current-industry"></select>
+        </div>
+        <div class="form-group">
+          <label>Internships / Projects / Relevant Experience</label>
+          <textarea id="ai-internships" placeholder="e.g. SWE intern at fintech startup, ML project, research assistant"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-section-label">Career Goals</div>
+        <div class="form-group">
+          <label>Target / Dream Role</label>
+          <select id="ai-target-role"></select>
+        </div>
+        <div class="form-group">
+          <label>Salary Expectations (optional)</label>
+          <input type="text" id="ai-salary" placeholder="e.g. $100k year 1, $150k within 3 years"/>
+        </div>
+        <div class="form-group">
+          <label>Timeline Urgency</label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="urgency" value="Exploring options"/><span>Exploring options</span></label>
+            <label class="radio-item"><input type="radio" name="urgency" value="Actively planning" checked/><span>Actively planning</span></label>
+            <label class="radio-item"><input type="radio" name="urgency" value="Urgent — need a job ASAP"/><span>Urgent — need a job ASAP</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-section-label">Skills &amp; Preferences</div>
+        <div class="form-group">
+          <label>Current Skills &amp; Tools</label>
+          <textarea id="ai-skills" placeholder="e.g. Python, SQL, Excel, Figma, React, public speaking"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Geographic Preference (optional)</label>
+          <input type="text" id="ai-location" placeholder="e.g. New York City, remote only, open to relocation"/>
+        </div>
+        <div class="form-group">
+          <label>Work Style Preference</label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="work_style" value="Startup / fast-paced"/><span>Startup / fast-paced</span></label>
+            <label class="radio-item"><input type="radio" name="work_style" value="Large company / structured"/><span>Large company / structured</span></label>
+            <label class="radio-item"><input type="radio" name="work_style" value="No preference" checked/><span>No preference</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-section-label">Anything Else?</div>
+        <div class="form-group">
+          <label>Constraints / Special Circumstances</label>
+          <textarea id="ai-constraints" placeholder="e.g. visa sponsorship needed, career switching, returning from gap year"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Additional Context</label>
+          <textarea id="ai-extra" placeholder="Anything else to personalize your plan..."></textarea>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generate-btn" onclick="generatePlan()">
+        Generate My Career Plan
+      </button>
+    </div>
+
+    <!-- Right: output -->
+    <div class="planner-output">
+      <div class="plan-status-bar">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Complete the form and click Generate to receive your personalized career roadmap.</span>
+      </div>
+
+      <div class="plan-tabs">
+        <button class="plan-tab active" data-ptab="roadmap">Roadmap</button>
+        <button class="plan-tab" data-ptab="data-charts">Data Charts</button>
+        <button class="plan-tab" data-ptab="career-paths">Career Paths</button>
+        <button class="plan-tab" data-ptab="timeline">Timeline</button>
+      </div>
+
+      <!-- Roadmap pane -->
+      <div class="plan-pane active" id="ptab-roadmap">
+        <div class="plan-md" id="plan-md-content">
+          <p style="color:var(--text3);font-size:13px;margin-top:20px;">
+            Fill in your profile on the left and click <strong style="color:var(--text1)">Generate My Career Plan</strong>.<br/>
+            The AI advisor matches your situation against <strong style="color:var(--gold)">75,000+ real career trajectories</strong> and produces a month-by-month roadmap backed by real data.
+          </p>
+        </div>
+      </div>
+
+      <!-- Data charts pane -->
+      <div class="plan-pane" id="ptab-data-charts">
+        <div class="plan-charts">
+          <div class="plan-chart-card">
+            <div class="plan-chart-header"><div class="plan-chart-title">Where people go from your current role</div></div>
+            <div class="plan-chart-inner chart-loading" id="plan-chart-role">
+              <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/></svg>
+              Waiting for plan
+            </div>
+          </div>
+          <div class="plan-chart-card">
+            <div class="plan-chart-header"><div class="plan-chart-title">First jobs for your major</div></div>
+            <div class="plan-chart-inner chart-loading" id="plan-chart-major">
+              <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/></svg>
+              Waiting for plan
+            </div>
+          </div>
+          <div class="plan-chart-card">
+            <div class="plan-chart-header"><div class="plan-chart-title">Industry switch paths</div></div>
+            <div class="plan-chart-inner chart-loading" id="plan-chart-industry">
+              <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/></svg>
+              Waiting for plan
+            </div>
+          </div>
+          <div class="plan-chart-card">
+            <div class="plan-chart-header"><div class="plan-chart-title">Promotion velocity — relevant transitions highlighted</div></div>
+            <div class="plan-chart-inner chart-loading" id="plan-chart-promo">
+              <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/></svg>
+              Waiting for plan
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Career paths pane -->
+      <div class="plan-pane" id="ptab-career-paths">
+        <div class="plan-paths" id="plan-paths-content">
+          <p style="color:var(--text3);font-size:13px;">Career path data will appear here after you generate your plan.</p>
+        </div>
+      </div>
+
+      <!-- Timeline pane -->
+      <div class="plan-pane" id="ptab-timeline">
+        <div class="timeline-pane">
+          <div class="plan-chart-inner chart-loading" id="plan-chart-timeline" style="min-height:400px;">
+            <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/></svg>
+            Waiting for plan
+          </div>
+        </div>
+      </div>
+
+      <!-- Export row -->
+      <div class="export-row">
+        <button class="export-btn" id="btn-pdf" disabled onclick="exportPDF()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Download PDF
+        </button>
+        <button class="export-btn" id="btn-ics" disabled onclick="exportICS()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Add to Calendar
+        </button>
+        <span class="export-note">Powered by Gemini 2.5 Flash · Requires GOOGLE_API_KEY in .env</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ── Plotly shared ── */
-const BG     = '#161616';
-const GOLD   = '#c9a96e';
-const GOLDDIM= '#3a3020';
-const TEXT1  = '#f4f4f4';
-const TEXT2  = '#8a8a8a';
-const TEXT3  = '#484848';
-const GRID   = '#1e1e1e';
+/* ── Shared Plotly config ── */
+const BG      = '#161616';
+const GOLD    = '#c9a96e';
+const GOLDDIM = '#3a3020';
+const GOLD2   = '#e8c98a';
+const TEXT1   = '#f4f4f4';
+const TEXT2   = '#8a8a8a';
+const TEXT3   = '#484848';
+const GRID    = '#1e1e1e';
 
 const BASE_LAYOUT = {
-  paper_bgcolor: BG,
-  plot_bgcolor:  BG,
+  paper_bgcolor: BG, plot_bgcolor: BG,
   font: { family:"'Inter',sans-serif", color:TEXT2, size:12 },
   margin: { l:8, r:110, t:32, b:44 },
-  xaxis: {
-    gridcolor:GRID, zeroline:false, color:TEXT3,
-    tickfont:{size:11}, linecolor:GRID,
-  },
-  yaxis: {
-    gridcolor:'rgba(0,0,0,0)', zeroline:false,
-    color:TEXT1, tickfont:{size:13}, showgrid:false,
-    automargin:true,
-  },
-  showlegend:false,
-  bargap:0.38,
+  xaxis: { gridcolor:GRID, zeroline:false, color:TEXT3, tickfont:{size:11}, linecolor:GRID },
+  yaxis: { gridcolor:'rgba(0,0,0,0)', zeroline:false, color:TEXT1, tickfont:{size:13}, showgrid:false, automargin:true },
+  showlegend:false, bargap:0.38,
 };
 const CFG = { displayModeBar:false, responsive:true };
 
 function plotBar(id, x, y, colors, texts, extra={}) {
   const el = document.getElementById(id);
-  el.classList.remove('chart-loading');
-  el.innerHTML = '';
+  el.classList.remove('chart-loading'); el.innerHTML = '';
   Plotly.newPlot(el,
     [{ type:'bar', orientation:'h', x, y,
        marker:{ color:colors, line:{width:0} },
        text:texts, textposition:'outside',
-       textfont:{size:12, color:'#686868'},
-       cliponaxis:false,
-       insidetextanchor:'start' }],
-    Object.assign({}, BASE_LAYOUT, {height:500}, extra),
-    CFG);
+       textfont:{size:12, color:'#686868'}, cliponaxis:false }],
+    Object.assign({}, BASE_LAYOUT, {height:500}, extra), CFG);
 }
 
-/* ── Animated counter ── */
+/* ── Counter ── */
 function animateCount(el, target) {
-  const str = target.replace(/,/g,'');
-  const num = parseInt(str, 10);
+  const num = parseInt(target.replace(/,/g,''), 10);
   if (isNaN(num)) { el.textContent = target; return; }
-  let start = 0;
-  const dur = 900, step = 16;
-  const steps = Math.ceil(dur/step);
-  let i = 0;
-  const t = setInterval(() => {
-    i++;
-    const progress = i/steps;
-    const ease = 1 - Math.pow(1 - progress, 3);
-    const cur = Math.round(ease * num);
-    el.textContent = cur.toLocaleString();
-    if (i >= steps) { el.textContent = target; clearInterval(t); }
-  }, step);
+  let i=0; const steps=Math.ceil(900/16);
+  const t = setInterval(()=>{
+    i++; const e=1-Math.pow(1-i/steps,3);
+    el.textContent = Math.round(e*num).toLocaleString();
+    if(i>=steps){el.textContent=target;clearInterval(t);}
+  },16);
 }
 
 /* ── Filter helper ── */
@@ -663,7 +842,7 @@ function filterSelect(sel, all, q) {
     : all;
   const prev = sel.value;
   sel.innerHTML = filt.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
-  if (filt.includes(prev)) sel.value = prev;
+  if(filt.includes(prev)) sel.value = prev;
   return sel.value;
 }
 
@@ -673,13 +852,9 @@ let META = null;
 async function boot() {
   META = await fetch('/api/meta').then(r=>r.json());
 
-  /* Pills */
-  document.getElementById('pill-persons').textContent =
-    META.stats.total_persons.toLocaleString() + ' profiles';
-  document.getElementById('pill-date').textContent =
-    'Updated ' + META.metadata.generated_at.slice(0,10);
+  document.getElementById('pill-persons').textContent = META.stats.total_persons.toLocaleString() + ' profiles';
+  document.getElementById('pill-date').textContent    = 'Updated ' + META.metadata.generated_at.slice(0,10);
 
-  /* Stat strip */
   const strips = [
     [META.stats.total_persons, 'Persons Analyzed'],
     [META.stats.total_jobs,    'Job Records'],
@@ -694,86 +869,70 @@ async function boot() {
       <div class="stat-n" data-target="${n.toLocaleString()}">0</div>
       <div class="stat-l">${l}</div>
     </div>`).join('');
-  // Animate after tiny delay
-  setTimeout(()=>{
-    stripEl.querySelectorAll('.stat-n').forEach(el=>{
-      animateCount(el, el.dataset.target);
-    });
-  }, 200);
+  setTimeout(()=>stripEl.querySelectorAll('.stat-n').forEach(el=>animateCount(el,el.dataset.target)),200);
 
-  /* Overview grid */
   const files = META.metadata.data_files.join(' · ') || '—';
   document.getElementById('ov-grid').innerHTML = `
-    <div class="ov-card">
-      <div class="ov-card-accent"></div>
+    <div class="ov-card"><div class="ov-card-accent"></div>
       <div class="ov-card-label">Dataset Scale</div>
       <div class="ov-card-title">Built on ${META.stats.total_persons.toLocaleString()} real career journeys</div>
       <div class="ov-card-desc">Sourced from Live Data Technologies, this dataset captures millions of individual role transitions, promotions, and career pivots across industries and geographies.</div>
       <div class="ov-card-nums">
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.total_persons.toLocaleString()}</div>
-          <div class="ov-num-lbl">Profiles</div>
-        </div>
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.total_jobs.toLocaleString()}</div>
-          <div class="ov-num-lbl">Job Records</div>
-        </div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.total_persons.toLocaleString()}</div><div class="ov-num-lbl">Profiles</div></div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.total_jobs.toLocaleString()}</div><div class="ov-num-lbl">Job Records</div></div>
       </div>
     </div>
-    <div class="ov-card">
-      <div class="ov-card-accent"></div>
+    <div class="ov-card"><div class="ov-card-accent"></div>
       <div class="ov-card-label">Role Intelligence</div>
       <div class="ov-card-title">${META.stats.unique_roles.toLocaleString()} roles mapped across the career graph</div>
       <div class="ov-card-desc">Every transition between job titles is weighted by probability. Explore where any role tends to go next, and how long each move typically takes.</div>
       <div class="ov-card-nums">
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.unique_roles.toLocaleString()}</div>
-          <div class="ov-num-lbl">Unique Roles</div>
-        </div>
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.target_roles.toLocaleString()}</div>
-          <div class="ov-num-lbl">Career Paths</div>
-        </div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.unique_roles.toLocaleString()}</div><div class="ov-num-lbl">Unique Roles</div></div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.target_roles.toLocaleString()}</div><div class="ov-num-lbl">Career Paths</div></div>
       </div>
     </div>
-    <div class="ov-card">
-      <div class="ov-card-accent"></div>
+    <div class="ov-card"><div class="ov-card-accent"></div>
       <div class="ov-card-label">Education Outcomes</div>
       <div class="ov-card-title">What ${META.stats.majors.toLocaleString()} majors actually lead to</div>
       <div class="ov-card-desc">From Computer Science to Philosophy — see exactly which job titles new graduates land in and the probability distribution of those first career steps.</div>
       <div class="ov-card-nums">
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.majors.toLocaleString()}</div>
-          <div class="ov-num-lbl">Fields of Study</div>
-        </div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.majors.toLocaleString()}</div><div class="ov-num-lbl">Fields of Study</div></div>
       </div>
     </div>
-    <div class="ov-card">
-      <div class="ov-card-accent"></div>
+    <div class="ov-card"><div class="ov-card-accent"></div>
       <div class="ov-card-label">Industry Mobility</div>
       <div class="ov-card-title">Cross-sector movement across ${META.stats.industries.toLocaleString()} industries</div>
       <div class="ov-card-desc">Understand how professionals migrate between sectors — which industries retain talent and which act as stepping stones to others. Source: ${files}.</div>
       <div class="ov-card-nums">
-        <div class="ov-num">
-          <div class="ov-num-val">${META.stats.industries.toLocaleString()}</div>
-          <div class="ov-num-lbl">Industries</div>
-        </div>
+        <div class="ov-num"><div class="ov-num-val">${META.stats.industries.toLocaleString()}</div><div class="ov-num-lbl">Industries</div></div>
       </div>
     </div>`;
 
-  /* Populate selects */
+  // Populate main selects
   ['role-select','major-select','ind-select','path-select'].forEach((id,i)=>{
     const lists=[META.top_roles,META.top_majors,META.top_industries,META.top_target_roles];
     const sel=document.getElementById(id);
     sel.innerHTML=lists[i].map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
   });
 
-  /* Hide loader */
-  const ldr=document.getElementById('loader');
-  ldr.classList.add('fade');
-  setTimeout(()=>ldr.remove(),700);
+  // Populate AI planner selects
+  const aiMajor  = document.getElementById('ai-major');
+  const aiCRole  = document.getElementById('ai-current-role');
+  const aiCInd   = document.getElementById('ai-current-industry');
+  const aiTRole  = document.getElementById('ai-target-role');
 
-  /* Pre-load all charts */
+  const blankOpt = '<option value="">— select —</option>';
+  aiMajor.innerHTML = META.top_majors.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+  aiCRole.innerHTML  = blankOpt + META.top_roles.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+  aiCInd.innerHTML   = blankOpt + META.top_industries.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+  aiTRole.innerHTML  = blankOpt + META.top_target_roles.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+
+  // Hide loader
+  const ldr = document.getElementById('loader');
+  ldr.classList.add('fade');
+  setTimeout(()=>ldr.remove(), 700);
+
+  // Pre-load charts
   loadPromo();
   loadRole(META.top_roles[0]);
   loadMajor(META.top_majors[0]);
@@ -781,37 +940,31 @@ async function boot() {
   loadPaths(META.top_target_roles[0]);
 }
 
-/* ── Loaders ── */
-function setLoading(id) {
-  const el=document.getElementById(id);
-  el.innerHTML=`
-    <svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none">
-      <path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/>
-      <line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/>
-    </svg>Loading`;
+/* ── Chart loaders ── */
+function setLoading(id, msg='Loading') {
+  const el = document.getElementById(id);
+  el.innerHTML = `<svg class="chart-loading-hex" viewBox="0 0 40 40" fill="none"><path d="M20 3 L35 11.5 L35 28.5 L20 37 L5 28.5 L5 11.5 Z" stroke="#c9a96e" stroke-width="1.6" fill="none"/><line x1="5" y1="20" x2="35" y2="20" stroke="#c9a96e" stroke-width="1.6" opacity=".5"/></svg>${msg}`;
   el.classList.add('chart-loading');
 }
 
 async function loadPromo() {
-  const data=await fetch('/api/promo').then(r=>r.json());
-  const ents=Object.entries(data).sort((a,b)=>a[1].median_months-b[1].median_months);
-  const el=document.getElementById('chart-promo');
-  el.classList.remove('chart-loading');el.innerHTML='';
+  const data = await fetch('/api/promo').then(r=>r.json());
+  const ents = Object.entries(data).sort((a,b)=>a[1].median_months-b[1].median_months);
+  const el   = document.getElementById('chart-promo');
+  el.classList.remove('chart-loading'); el.innerHTML='';
   Plotly.newPlot(el,[
     { type:'bar',orientation:'h',
       x:ents.filter(e=>!e[1].low_confidence).map(e=>e[1].median_months),
       y:ents.filter(e=>!e[1].low_confidence).map(e=>e[0]),
       marker:{color:GOLD,line:{width:0}},
       text:ents.filter(e=>!e[1].low_confidence).map(e=>`${e[1].median_months.toFixed(0)} mo`),
-      textposition:'outside',textfont:{size:11,color:TEXT3},
-      name:'High confidence',cliponaxis:false },
+      textposition:'outside',textfont:{size:11,color:TEXT3},name:'High confidence',cliponaxis:false },
     { type:'bar',orientation:'h',
       x:ents.filter(e=>e[1].low_confidence).map(e=>e[1].median_months),
       y:ents.filter(e=>e[1].low_confidence).map(e=>e[0]),
       marker:{color:GOLDDIM,line:{width:0}},
       text:ents.filter(e=>e[1].low_confidence).map(e=>`${e[1].median_months.toFixed(0)} mo`),
-      textposition:'outside',textfont:{size:11,color:TEXT3},
-      name:'Low confidence',cliponaxis:false },
+      textposition:'outside',textfont:{size:11,color:TEXT3},name:'Low confidence',cliponaxis:false },
   ],Object.assign({},BASE_LAYOUT,{
     height:540,showlegend:true,
     legend:{bgcolor:'rgba(0,0,0,0)',font:{color:TEXT2,size:11},orientation:'h',x:0,y:1.04},
@@ -820,68 +973,56 @@ async function loadPromo() {
 }
 
 async function loadRole(role) {
-  if(!role)return;setLoading('chart-role');
-  const data=await fetch(`/api/role/${encodeURIComponent(role)}`).then(r=>r.json());
-  const p=data.transitions.slice().reverse();
+  if(!role)return; setLoading('chart-role');
+  const data = await fetch(`/api/role/${encodeURIComponent(role)}`).then(r=>r.json());
+  const p = data.transitions.slice().reverse();
   plotBar('chart-role',p.map(x=>x[1]),p.map(x=>x[0]),p.map(()=>GOLD),
     p.map(x=>`${(x[1]*100).toFixed(1)}%`),
-    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500,showlegend:false});
+    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500});
 }
 
 async function loadMajor(major) {
-  if(!major)return;setLoading('chart-major');
-  const data=await fetch(`/api/major/${encodeURIComponent(major)}`).then(r=>r.json());
-  const p=data.roles.slice().reverse();
+  if(!major)return; setLoading('chart-major');
+  const data = await fetch(`/api/major/${encodeURIComponent(major)}`).then(r=>r.json());
+  const p = data.roles.slice().reverse();
   plotBar('chart-major',p.map(x=>x[1]),p.map(x=>x[0]),p.map(()=>GOLD),
     p.map(x=>`${(x[1]*100).toFixed(1)}%`),
-    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500,showlegend:false});
+    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500});
 }
 
 async function loadInd(ind) {
-  if(!ind)return;setLoading('chart-ind');
-  const data=await fetch(`/api/industry/${encodeURIComponent(ind)}`).then(r=>r.json());
-  const p=data.destinations.slice().reverse();
+  if(!ind)return; setLoading('chart-ind');
+  const data = await fetch(`/api/industry/${encodeURIComponent(ind)}`).then(r=>r.json());
+  const p = data.destinations.slice().reverse();
   plotBar('chart-ind',p.map(x=>x[1]),p.map(x=>x[0]),p.map(()=>GOLD),
     p.map(x=>`${(x[1]*100).toFixed(1)}%`),
-    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500,showlegend:false});
+    {xaxis:{...BASE_LAYOUT.xaxis,tickformat:'.0%',title:{text:'Probability',font:{size:11,color:TEXT3}}},height:500});
 }
 
 async function loadPaths(role) {
   if(!role)return;
-  const data=await fetch(`/api/paths/${encodeURIComponent(role)}`).then(r=>r.json());
-  const list=document.getElementById('paths-list');
+  const data = await fetch(`/api/paths/${encodeURIComponent(role)}`).then(r=>r.json());
+  const list = document.getElementById('paths-list');
   if(!data.paths.length){
     list.innerHTML=`<div style="padding:40px 28px;color:${TEXT3};font-size:13px;">No data for this role.</div>`;
     return;
   }
-  list.innerHTML=data.paths.map((entry,i)=>{
-    // Deduplicate consecutive identical steps
-    const deduped=[];
-    let count=1;
+  list.innerHTML = data.paths.map((entry,i)=>{
+    const deduped=[]; let count=1;
     for(let j=0;j<entry.path.length;j++){
-      if(j>0 && entry.path[j]===entry.path[j-1]){
-        count++;
-        deduped[deduped.length-1].count=count;
-      } else {
-        count=1;
-        deduped.push({step:entry.path[j],count:1});
-      }
+      if(j>0&&entry.path[j]===entry.path[j-1]){count++;deduped[deduped.length-1].count=count;}
+      else{count=1;deduped.push({step:entry.path[j],count:1});}
     }
     const chips=deduped.map((d,j)=>{
       const badge=d.count>1?` <span style="font-size:10px;color:var(--gold);opacity:.7;">x${d.count}</span>`:'';
       const arr=j<deduped.length-1?`<span class="chip-arr">&#8594;</span>`:'';
       return `<span class="chip">${d.step}${badge}</span>${arr}`;
     }).join('');
-    return `
-    <div class="path-row">
-      <div class="path-idx">${i+1}</div>
-      <div class="path-chips">${chips}</div>
-      <div class="path-vol">${entry.frequency.toLocaleString()}</div>
-    </div>`;
+    return `<div class="path-row"><div class="path-idx">${i+1}</div><div class="path-chips">${chips}</div><div class="path-vol">${entry.frequency.toLocaleString()}</div></div>`;
   }).join('');
 }
 
-/* ── Tabs ── */
+/* ── Tab wiring ── */
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -892,10 +1033,19 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
   });
 });
 
+document.querySelectorAll('.plan-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.plan-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.plan-pane').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('ptab-'+btn.dataset.ptab).classList.add('active');
+    setTimeout(()=>window.dispatchEvent(new Event('resize')),60);
+  });
+});
+
 /* ── Search wiring ── */
 function wire(searchId,selectId,list,loader){
-  const inp=document.getElementById(searchId);
-  const sel=document.getElementById(selectId);
+  const inp=document.getElementById(searchId), sel=document.getElementById(selectId);
   inp.addEventListener('input',()=>{ const v=filterSelect(sel,list(),inp.value); if(v)loader(v); });
   sel.addEventListener('change',()=>loader(sel.value));
 }
@@ -906,6 +1056,263 @@ boot().then(()=>{
   wire('ind-search','ind-select',()=>META.top_industries,loadInd);
   wire('path-search','path-select',()=>META.top_target_roles,loadPaths);
 });
+
+/* ── AI Planner ── */
+let PLAN_JSON = '';
+let PLAN_MONTHS = 12;
+
+function setStatus(text, state='idle') {
+  const dot  = document.getElementById('status-dot');
+  const span = document.getElementById('status-text');
+  span.textContent = text;
+  dot.className = 'status-dot' + (state==='active'?' active':state==='done'?' done':state==='error'?' error':'');
+}
+
+function md2html(md) {
+  return md
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^---$/gm,'<hr/>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    .replace(/^[-*] (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g,m=>`<ul>${m}</ul>`)
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[huplbci])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'');
+}
+
+async function generatePlan() {
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  setStatus('Analyzing your profile against 75,000+ real career trajectories...', 'active');
+
+  const profile = {
+    major:            document.getElementById('ai-major').value,
+    current_role:     document.getElementById('ai-current-role').value,
+    current_industry: document.getElementById('ai-current-industry').value,
+    target_role:      document.getElementById('ai-target-role').value,
+    years_exp:        document.getElementById('ai-years').value,
+    months_to_graduation: document.getElementById('ai-months').value,
+    skills:           document.getElementById('ai-skills').value,
+    gpa:              document.getElementById('ai-gpa').value,
+    location_pref:    document.getElementById('ai-location').value,
+    work_style:       document.querySelector('input[name=work_style]:checked')?.value || 'No preference',
+    urgency:          document.querySelector('input[name=urgency]:checked')?.value || 'Actively planning',
+    internships:      document.getElementById('ai-internships').value,
+    salary_expectations: document.getElementById('ai-salary').value,
+    constraints:      document.getElementById('ai-constraints').value,
+    extra:            document.getElementById('ai-extra').value,
+  };
+  PLAN_MONTHS = parseInt(profile.months_to_graduation) || 12;
+
+  try {
+    setStatus('Generating your personalized plan — this may take 15–30 seconds...', 'active');
+    const res = await fetch('/api/planner/generate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(profile),
+    });
+
+    if(!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Server error');
+    }
+
+    const data = await res.json();
+    const plan = data.plan;
+    const sup  = data.supporting;
+    PLAN_JSON  = JSON.stringify(plan);
+
+    // Render roadmap markdown
+    const target   = profile.target_role || 'your target role';
+    const mdLines  = [
+      `# Your Personalized Career Roadmap`,
+      `**Goal:** ${target} &nbsp;|&nbsp; **Timeline:** ${PLAN_MONTHS} months\n`,
+      `> ${plan.summary || ''}\n`,
+      `## Where You Stand`,
+      (plan.where_i_stand || '') + '\n',
+      `## Key Gaps to Close`,
+      ...(plan.gap_analysis||[]).map(g=>`- ${g}`),
+      '\n## Month-by-Month Milestones',
+      ...(plan.milestones||[]).flatMap(m=>[
+        `### Month ${m.month} — ${m.title} \`[${m.category}]\``,
+        `**Action:** ${m.action}`,
+        `**Done when:** ${m.success_metric}\n`,
+      ]),
+      `## Quick Wins (Next 90 Days)`,
+      ...(plan.quick_wins||[]).map((w,i)=>`${i+1}. ${w}`),
+      '\n## Risks & Watch-Outs',
+      ...(plan.risks||[]).map(r=>`- ${r}`),
+      '\n## Salary Trajectory',
+      (plan.salary_trajectory||'') + '\n',
+      `## What the Real Data Says`,
+      (plan.data_insights||'') + '\n',
+      '---',
+      '*Generated by SkillShock AI · Gemini 2.5 Flash · 75,000+ real career trajectories*',
+    ].join('\n');
+
+    document.getElementById('plan-md-content').innerHTML = md2html(mdLines);
+
+    // Data charts
+    function plotSupBar(id, pairs, title) {
+      const el = document.getElementById(id);
+      el.classList.remove('chart-loading'); el.innerHTML='';
+      if(!pairs||!pairs.length){
+        el.innerHTML=`<div style="padding:40px;color:${TEXT3};font-size:12px;text-align:center;">No data found for this field.</div>`;
+        return;
+      }
+      const rev = [...pairs].reverse();
+      const x = rev.map(p=>Array.isArray(p)?p[1]:(p.months||0));
+      const y = rev.map(p=>Array.isArray(p)?p[0]:(p.label||''));
+      const texts = rev.map(p=>{
+        const v = Array.isArray(p)?p[1]:(p.months||0);
+        return typeof v==='number'&&v<2 ? `${(v*100).toFixed(1)}%` : `${v.toFixed?v.toFixed(0):v}`;
+      });
+      Plotly.newPlot(el,
+        [{type:'bar',orientation:'h',x,y,
+          marker:{color:rev.map(p=>p.relevant?GOLD2:GOLD), line:{width:0}},
+          text:texts,textposition:'outside',textfont:{size:11,color:TEXT3},cliponaxis:false}],
+        Object.assign({},BASE_LAYOUT,{height:280,title:{text:title,font:{size:11,color:TEXT3}}}),CFG);
+    }
+
+    plotSupBar('plan-chart-role',     sup.role_transitions,      'Role Transitions');
+    plotSupBar('plan-chart-major',    sup.major_first_roles,     'Major → First Role');
+    plotSupBar('plan-chart-industry', sup.industry_destinations,  'Industry Switches');
+
+    // Promo chart with relevant highlighted
+    const promoEl = document.getElementById('plan-chart-promo');
+    promoEl.classList.remove('chart-loading'); promoEl.innerHTML='';
+    const pdata = sup.promo_velocity;
+    if(pdata&&pdata.length){
+      Plotly.newPlot(promoEl,[
+        {type:'bar',orientation:'h',
+         x:pdata.filter(p=>p.relevant).map(p=>p.months),
+         y:pdata.filter(p=>p.relevant).map(p=>p.label),
+         marker:{color:GOLD2,line:{width:0}},
+         text:pdata.filter(p=>p.relevant).map(p=>`${p.months.toFixed(0)}mo`),
+         textposition:'outside',textfont:{size:11,color:TEXT3},name:'Your Path',cliponaxis:false},
+        {type:'bar',orientation:'h',
+         x:pdata.filter(p=>!p.relevant&&!p.low_confidence).map(p=>p.months),
+         y:pdata.filter(p=>!p.relevant&&!p.low_confidence).map(p=>p.label),
+         marker:{color:GOLD,line:{width:0}},
+         text:pdata.filter(p=>!p.relevant&&!p.low_confidence).map(p=>`${p.months.toFixed(0)}mo`),
+         textposition:'outside',textfont:{size:11,color:TEXT3},name:'High Confidence',cliponaxis:false},
+        {type:'bar',orientation:'h',
+         x:pdata.filter(p=>p.low_confidence).map(p=>p.months),
+         y:pdata.filter(p=>p.low_confidence).map(p=>p.label),
+         marker:{color:GOLDDIM,line:{width:0}},
+         text:[],name:'Low Confidence',cliponaxis:false},
+      ],Object.assign({},BASE_LAYOUT,{
+        height:280,showlegend:true,
+        legend:{bgcolor:'rgba(0,0,0,0)',font:{color:TEXT2,size:10},orientation:'h',x:0,y:1.1},
+      }),CFG);
+    }
+
+    // Career paths
+    const pathsEl = document.getElementById('plan-paths-content');
+    const pathData = sup.paths_to_target;
+    if(!pathData||!pathData.length){
+      pathsEl.innerHTML=`<p style="color:${TEXT3};font-size:13px;">No career path data found for the target role.</p>`;
+    } else {
+      pathsEl.innerHTML = pathData.map((entry,i)=>{
+        const chips = entry.path.map((s,j)=>
+          `<span class="chip">${s}</span>${j<entry.path.length-1?'<span class="chip-arr">→</span>':''}`
+        ).join('');
+        return `<div class="plan-path-row"><div class="plan-path-idx">${i+1}</div><div class="plan-path-chips">${chips}</div><div class="plan-path-vol">${entry.frequency.toLocaleString()}</div></div>`;
+      }).join('');
+    }
+
+    // Timeline / Gantt
+    const milestones = plan.milestones||[];
+    const timelineEl = document.getElementById('plan-chart-timeline');
+    timelineEl.classList.remove('chart-loading'); timelineEl.innerHTML='';
+    if(milestones.length){
+      const catColors = {
+        'Skills':'#c9a96e','Networking':'#6ea87a','Applications':'#a07830',
+        'Experience':'#c4855a','Education':'#8b7cba','Career Move':'#b85c5c',
+      };
+      const traces=[]; const seen=new Set();
+      milestones.forEach((m,i)=>{
+        const cat=m.category||'Skills', color=catColors[cat]||GOLD;
+        const label=`M${m.month}: ${m.title}`;
+        traces.push({
+          type:'bar',orientation:'h',
+          x:[0.8],y:[label],base:[m.month-0.4],
+          marker:{color:color},name:cat,legendgroup:cat,showlegend:!seen.has(cat),
+          hovertemplate:`<b>Month ${m.month}: ${m.title}</b><br>Category: ${cat}<br>Action: ${m.action}<br>Done: ${m.success_metric}<extra></extra>`,
+          text:[m.title],textposition:'inside',insidetextanchor:'middle',
+          textfont:{size:10,color:'#0b0b0b'},
+        });
+        seen.add(cat);
+      });
+      Plotly.newPlot(timelineEl,traces,Object.assign({},BASE_LAYOUT,{
+        title:{text:'Month-by-Month Career Roadmap',font:{size:13,color:TEXT2}},
+        xaxis:{title:'Month',range:[0,PLAN_MONTHS+1],dtick:1,gridcolor:GRID,color:TEXT3},
+        yaxis:{autorange:'reversed',tickfont:{size:10},color:TEXT1,showgrid:false},
+        barmode:'overlay',height:Math.max(350,milestones.length*44),
+        legend:{orientation:'h',yanchor:'bottom',y:1.02,xanchor:'left',x:0,bgcolor:'rgba(0,0,0,0)',font:{color:TEXT2,size:10}},
+        margin:{l:20,r:20,t:80,b:40},
+        paper_bgcolor:BG,plot_bgcolor:BG,
+        showlegend:true,
+      }),CFG);
+    }
+
+    // Enable exports
+    document.getElementById('btn-pdf').disabled = false;
+    document.getElementById('btn-ics').disabled = false;
+    setStatus('Plan generated successfully.', 'done');
+
+  } catch(err) {
+    setStatus('Error: ' + err.message, 'error');
+    document.getElementById('plan-md-content').innerHTML =
+      `<p style="color:#f44;font-size:13px;">⚠️ ${err.message}</p>`;
+  }
+
+  btn.disabled = false;
+}
+
+async function exportPDF() {
+  if(!PLAN_JSON) return;
+  const profile_summary = [
+    document.getElementById('ai-major').value,
+    document.getElementById('ai-current-role').value,
+    document.getElementById('ai-target-role').value,
+  ].filter(Boolean).join(' · ') || 'SkillShock Plan';
+
+  const res = await fetch('/api/planner/pdf', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({plan_json: PLAN_JSON, profile_summary}),
+  });
+  if(res.ok){
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href=url; a.download='skillshock_plan.pdf'; a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function exportICS() {
+  if(!PLAN_JSON) return;
+  const res = await fetch('/api/planner/ics', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({plan_json: PLAN_JSON, months_total: PLAN_MONTHS}),
+  });
+  if(res.ok){
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href=url; a.download='skillshock_plan.ics'; a.click();
+    URL.revokeObjectURL(url);
+  }
+}
 </script>
 </body>
 </html>

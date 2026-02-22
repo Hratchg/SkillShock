@@ -27,11 +27,11 @@ paths_to_role = data["paths_to_role"]
 # Pre-compute dropdown options (top-N most common entries)
 # ---------------------------------------------------------------------------
 
-# Top 50 source roles: pick roles with the most unique next-role targets
+# Top 50 source roles
 _role_counts = {r: len(targets) for r, targets in role_trans.items()}
 top_roles = sorted(_role_counts, key=_role_counts.get, reverse=True)[:50]
 
-# Top 50 majors: filter to real-looking names (>= 4 chars, not numeric, >= 3 roles)
+# Majors: filter to real-looking names (>= 4 chars, not numeric, >= 3 roles)
 _real_majors = {
     m: roles for m, roles in major_first.items()
     if len(m) >= 4
@@ -40,13 +40,33 @@ _real_majors = {
     and len(roles) >= 3
     and not re.match(r"^\d", m)
 }
-top_majors = sorted(_real_majors, key=lambda m: (-len(_real_majors[m]), m))[:50]
+# All real majors for dropdown (sorted by role count); allow_custom_value lets user type any major
+top_majors = sorted(_real_majors, key=lambda m: (-len(_real_majors[m]), m))
 
-# Top 30 industries by number of destination industries
+
+def _choices_prefix_first(choices: list, query: str) -> list:
+    """Filter choices by query; put prefix matches first, then other substring matches (order within each group unchanged)."""
+    if not query or not query.strip():
+        return choices
+    q = query.strip().lower()
+    prefix = [x for x in choices if x.lower().startswith(q)]
+    rest = [x for x in choices if x not in prefix and q in x.lower()]
+    return prefix + rest
+
+
+def _major_choices_for_search(query: str) -> list:
+    """Filter majors by query; prefix matches first."""
+    return _choices_prefix_first(top_majors, query)
+
+
+# Case-insensitive lookup: normalized name -> (original_key, roles) for typed majors
+_major_lookup = {m.strip().lower(): (m, roles) for m, roles in major_first.items()}
+
+# Top 30 industries
 _ind_counts = {ind: len(dests) for ind, dests in industry_trans.items()}
 top_industries = sorted(_ind_counts, key=_ind_counts.get, reverse=True)[:30]
 
-# Top 50 target roles for career paths: pick roles with the most recorded paths
+# Top 50 target roles (career paths)
 _path_counts = {r: sum(p["frequency"] for p in paths) for r, paths in paths_to_role.items()}
 top_target_roles = sorted(_path_counts, key=_path_counts.get, reverse=True)[:50]
 
@@ -252,48 +272,97 @@ with gr.Blocks(title="SkillShock Dashboard") as demo:
         with gr.Tab("Role Transitions"):
             gr.Markdown("## Role Transition Explorer")
             gr.Markdown("Select a role to see the top 10 most likely next positions.")
+            role_search = gr.Textbox(
+                label="Search roles (prefix matches first)",
+                placeholder="e.g. Engineer",
+                value="",
+            )
             role_dd = gr.Dropdown(
                 choices=top_roles,
                 value=top_roles[0],
                 label="Source Role",
             )
             role_plot = gr.Plot(value=build_role_transition_chart(top_roles[0]))
+
+            def update_role_dropdown(query):
+                choices = _choices_prefix_first(top_roles, query)
+                first = choices[0] if choices else None
+                return gr.update(choices=choices, value=first)
+
+            role_search.change(fn=update_role_dropdown, inputs=role_search, outputs=role_dd)
             role_dd.change(fn=build_role_transition_chart, inputs=role_dd, outputs=role_plot)
 
         # ---- Tab 4: Major -> First Role ----
         with gr.Tab("Major -> First Role"):
             gr.Markdown("## Major to First Role")
             gr.Markdown("Select a major/field of study to see the top 10 first job titles.")
+            major_search = gr.Textbox(
+                label="Search majors (prefix matches first)",
+                placeholder="e.g. Physics",
+                value="",
+            )
             major_dd = gr.Dropdown(
                 choices=top_majors,
                 value=top_majors[0],
                 label="Major / Field of Study",
+                allow_custom_value=True,
             )
             major_plot = gr.Plot(value=build_major_chart(top_majors[0]))
+
+            def update_major_dropdown(query):
+                choices = _major_choices_for_search(query)
+                first = choices[0] if choices else None
+                return gr.update(choices=choices, value=first)
+
+            major_search.change(fn=update_major_dropdown, inputs=major_search, outputs=major_dd)
             major_dd.change(fn=build_major_chart, inputs=major_dd, outputs=major_plot)
 
         # ---- Tab 5: Industry Transitions ----
         with gr.Tab("Industry Transitions"):
             gr.Markdown("## Industry Transition Explorer")
             gr.Markdown("Select an industry to see the top 10 industries people move to.")
+            ind_search = gr.Textbox(
+                label="Search industries (prefix matches first)",
+                placeholder="e.g. Technology",
+                value="",
+            )
             ind_dd = gr.Dropdown(
                 choices=top_industries,
                 value=top_industries[0],
                 label="Source Industry",
             )
             ind_plot = gr.Plot(value=build_industry_chart(top_industries[0]))
+
+            def update_ind_dropdown(query):
+                choices = _choices_prefix_first(top_industries, query)
+                first = choices[0] if choices else None
+                return gr.update(choices=choices, value=first)
+
+            ind_search.change(fn=update_ind_dropdown, inputs=ind_search, outputs=ind_dd)
             ind_dd.change(fn=build_industry_chart, inputs=ind_dd, outputs=ind_plot)
 
         # ---- Tab 6: Career Paths ----
         with gr.Tab("Career Paths"):
             gr.Markdown("## Career Path Explorer")
             gr.Markdown("Select a target role to see the top 5 most common career paths leading to it.")
+            path_search = gr.Textbox(
+                label="Search target roles (prefix matches first)",
+                placeholder="e.g. Manager",
+                value="",
+            )
             path_dd = gr.Dropdown(
                 choices=top_target_roles,
                 value=top_target_roles[0],
                 label="Target Role",
             )
             path_html = gr.HTML(value=build_paths_table(top_target_roles[0]))
+
+            def update_path_dropdown(query):
+                choices = _choices_prefix_first(top_target_roles, query)
+                first = choices[0] if choices else None
+                return gr.update(choices=choices, value=first)
+
+            path_search.change(fn=update_path_dropdown, inputs=path_search, outputs=path_dd)
             path_dd.change(fn=build_paths_table, inputs=path_dd, outputs=path_html)
 
 

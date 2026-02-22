@@ -35,8 +35,8 @@ def run(output_path, api_key, upload_url):
     return True
 
 
+from dotenv import load_dotenv
 if __name__ == "__main__":
-    from dotenv import load_dotenv
     load_dotenv()
     run(
         output_path=os.getenv("OUTPUT_PATH", "./output.json"),

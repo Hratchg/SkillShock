@@ -5,4 +5,5 @@ __pycache__/
 .pytest_cache/
 *.pyc
 data/*.gz
+data/live_data*.jsonl
 skillshock.db

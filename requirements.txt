@@ -1,7 +1,8 @@
-pandas
-requests
-python-dotenv
-pytest
-gradio
-plotly
-rapidfireai
+# Python 3.12 recommended: rapidfireai requires numpy<2.1; numpy 2.1+ has 3.13 wheels.
+pandas>=2.2.3
+requests>=2.31
+python-dotenv>=1.0
+pytest>=8.0
+gradio>=6.0
+plotly>=5.0
+rapidfireai>=0.14

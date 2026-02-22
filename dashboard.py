@@ -51,6 +51,17 @@ top_industries   = sorted(_ind_counts, key=_ind_counts.get, reverse=True)[:30]
 _path_counts     = {r: sum(p["frequency"] for p in ps) for r, ps in paths_to_role.items()}
 top_target_roles = sorted(_path_counts, key=_path_counts.get, reverse=True)[:50]
 
+# ── RAG setup (RapidFire LangChainRagSpec) ────────────────────────
+USE_RAG = os.getenv("USE_RAG", "true").lower() in ("true", "1", "yes")
+rag_spec = None
+if USE_RAG:
+    try:
+        from rag_config import build_rag_spec, retrieve_context
+        rag_spec = build_rag_spec(raw, k=8)
+        print("RapidFire RAG active — FAISS index built.")
+    except Exception as e:
+        print(f"RAG init failed ({e}), using exact-match fallback.")
+
 # ── App ──────────────────────────────────────────────────────────
 app = FastAPI(title="SkillShock")
 UI_FILE = Path(__file__).parent / "ui.html"
@@ -268,10 +279,13 @@ async def api_planner_generate(body: dict):
     if not api_key:
         return JSONResponse({"error": "GOOGLE_API_KEY not set. Add it to your .env file."}, status_code=400)
 
-    data_ctx = _gather_context(
-        body.get("major"), body.get("current_role"),
-        body.get("target_role"), body.get("current_industry")
-    )
+    if rag_spec:
+        data_ctx = retrieve_context(rag_spec, body)
+    else:
+        data_ctx = _gather_context(
+            body.get("major"), body.get("current_role"),
+            body.get("target_role"), body.get("current_industry")
+        )
     prompt = _build_prompt(body, data_ctx)
 
     genai.configure(api_key=api_key)

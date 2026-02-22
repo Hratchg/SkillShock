@@ -7,3 +7,5 @@ __pycache__/
 data/*.gz
 data/live_data*.jsonl
 skillshock.db
+venv/
+.venv/

@@ -16,22 +16,44 @@ Students make education and career decisions using unreliable signals. SkillShoc
 ## Setup
 
 ### 1. Create and activate a virtual environment
+
+**macOS / Linux:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Install dependencies
+**Windows:**
 ```bash
-pip3 install numpy==2.2.0
-pip3 install -r requirements.txt
+python -m venv venv
+venv\Scripts\activate
 ```
 
-### 3. Set up environment variables (Optional)
+### 2. Install dependencies
+```bash
+pip install numpy==2.2.0
+pip install -r requirements.txt
+```
+
+> **Note:** The RAG dependencies (`faiss-cpu`, `langchain`, `sentence-transformers`) are ~2GB and only needed if you want AI-powered semantic retrieval. The dashboard works fine without them — set `USE_RAG=false` in your `.env` to skip RAG entirely.
+
+### 3. Set up environment variables
 ```bash
 cp .env.example .env
 ```
-Open `.env` and add your API keys if you have them. The app works without them.
+Open `.env` and add your API keys:
+
+| Variable | Required? | Description |
+|---|---|---|
+| `GOOGLE_API_KEY` | **Yes** (for AI Career Planner) | Google Gemini API key. Get one at [AI Studio](https://aistudio.google.com/app/apikey) |
+| `USE_RAG` | No | Set to `true` to enable RAG-powered context retrieval (requires heavy deps). Default: `false` |
+| `RAPIDFIRE_API_KEY` | No | RapidFire AI API key for publishing to RapidFire |
+| `RAPIDFIRE_UPLOAD_URL` | No | RapidFire upload endpoint URL |
+| `DATA_DIR` | No | Path to data files. Default: `./data` |
+| `DB_PATH` | No | SQLite database path. Default: `./skillshock.db` |
+| `OUTPUT_PATH` | No | Pipeline output path. Default: `./output.json` |
+
+> The dashboard's data visualizations work without any API keys. The `GOOGLE_API_KEY` is only needed for the AI Career Planner feature.
 
 ### 4. Add the data files
 Download the Live Data Technologies `.jsonl.gz` files from the team Google Drive (link in Discord) and place them in the `data/` folder:
@@ -45,10 +67,20 @@ SkillShock/
 
 ### 5. Run the pipeline
 Run these in order — each must finish before the next:
+
+**macOS / Linux:**
 ```bash
 DATA_DIR=data python3 ingest.py
 python3 analytics.py
 python3 export.py
+```
+
+**Windows:**
+```bash
+set DATA_DIR=data
+python ingest.py
+python analytics.py
+python export.py
 ```
 
 You should see:
@@ -58,7 +90,7 @@ You should see:
 
 ### 6. Launch the dashboard
 ```bash
-python3 dashboard.py
+python dashboard.py
 ```
 
 Opens at http://localhost:7860 with interactive charts:
@@ -68,6 +100,7 @@ Opens at http://localhost:7860 with interactive charts:
 - **Major to First Role** — what jobs do graduates actually get?
 - **Industry Transitions** — where do people switch industries to?
 - **Career Paths** — most common paths to any target role
+- **AI Career Planner** — personalized career roadmap powered by Gemini + real data
 
 ## Test
 
@@ -87,8 +120,10 @@ JSONL.GZ data → ingest.py → SQLite → analytics.py → export.py → output
 | `analytics.py` | Compute 5 career metrics |
 | `export.py` | Shape metrics into output.json |
 | `push.py` | POST to RapidFire AI (optional) |
-| `main.py` | Orchestrate the pipeline |
-| `dashboard.py` | Interactive Gradio dashboard |
+| `main.py` | Orchestrate the full pipeline |
+| `dashboard.py` | FastAPI backend + interactive UI |
+| `rag_config.py` | RAG pipeline setup (FAISS + LangChain) |
+| `ui.html` | Frontend (HTML/CSS/JS + Plotly CDN) |
 
 ## Data
 
@@ -97,4 +132,4 @@ Files are shared privately with the team — do not commit to GitHub.
 
 ## Tech Stack
 
-Python, SQLite, pandas, Gradio, Plotly, RapidFire AI
+Python, SQLite, pandas, FastAPI, Plotly, Google Gemini, RapidFire AI

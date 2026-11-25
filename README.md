@@ -1,19 +1,48 @@
 # SkillShock
 
-Career outcome intelligence platform. Reconstructs real career trajectories from Live Data Technologies People Data and turns them into interactive visualizations.
+**What careers actually look like, from 75,000+ real career histories.** SkillShock reconstructs career trajectories from Live Data Technologies people data and turns them into an interactive dashboard: how long promotions take, what jobs a major leads to, and which paths reach a target role.
 
-**Track:** Education & Learning
+Built by a team of three at a hackathon (Education & Learning track).
 
-## What It Does
+![SkillShock dashboard: promotion velocity, role transitions, major to first role, industry switches and career paths](docs/media/skillshock-demo.gif)
 
-Students make education and career decisions using unreliable signals. SkillShock analyzes 75,000+ real career trajectories to answer:
+<sub>Shown on synthetic sample data. The real dataset is licensed to the team and isn't in this repo.</sub>
+
+## Questions it answers
 
 - How long does it take to get promoted from IC to Senior? Senior to Director?
 - What jobs do Computer Science majors actually get?
 - What industries do people switch to from Tech? Finance?
 - What career paths lead to VP of Engineering?
 
-## Setup
+## What's interesting
+
+- **Real, messy data at scale.** The pipeline streams 75,139 people and 717,053 job records from compressed JSONL into SQLite, then normalizes messy seniority labels into a consistent career ladder.
+- **Five metrics, one export.** `analytics.py` computes promotion velocity (with low-confidence flags for thin samples), role and industry transitions, major-to-first-role and the most common paths to any role, and `export.py` shapes them into a single `output.json`.
+- **Tested end to end.** pytest covers ingest, analytics and export against a synthetic fixture.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A[JSONL.GZ people data] --> B[ingest.py]
+  B --> C[(SQLite)]
+  C --> D[analytics.py<br/>5 career metrics]
+  D --> E[export.py<br/>output.json]
+  E --> F[dashboard.py<br/>Gradio + Plotly]
+```
+
+## Try it on sample data (2 minutes)
+
+```bash
+python3 -m venv venv && source venv/bin/activate
+pip3 install numpy==2.2.0 && pip3 install -r requirements.txt
+python3 make_sample_data.py                     # 3,000 synthetic people into data/
+DATA_DIR=data python3 ingest.py && python3 analytics.py && python3 export.py
+python3 dashboard.py                            # http://localhost:7860
+```
+
+## Setup with the real data
 
 ### 1. Create and activate a virtual environment
 ```bash
@@ -75,11 +104,7 @@ Opens at http://localhost:7860 with interactive charts:
 pytest tests/ -v
 ```
 
-## Architecture
-
-```
-JSONL.GZ data → ingest.py → SQLite → analytics.py → export.py → output.json → dashboard.py
-```
+## Files
 
 | File | Role |
 |---|---|
